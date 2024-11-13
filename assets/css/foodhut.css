@@ -11390,3 +11390,22 @@ pre {
   object-fit: cover;
   max-height: 300px; /* Ajusta este valor según el tamaño deseado */
 }
+
+#objetivos .row > div {
+margin-bottom: 2rem; /* Espacio entre cada objetivo */
+}
+
+/* Ajustar el tamaño de las imágenes en la sección de BLOG */
+#blog .card img {
+  width: 100%; /* Asegura que la imagen ocupe todo el ancho del contenedor */
+  height: auto; /* Mantiene la proporción original de la imagen */
+  object-fit: cover; /* Asegura que la imagen cubra completamente el contenedor sin distorsionarse */
+  max-height: 300px; /* Limita la altura máxima de la imagen */
+}
+
+/* Estilo para las descripciones debajo de las imágenes */
+#blog .card-body .description {
+  margin-top: 1rem;
+  font-style: italic;
+  color: #ccc;
+}
