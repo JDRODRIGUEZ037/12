@@ -11383,3 +11383,10 @@ pre {
   visibility: visible;
   opacity: 1;
 }
+
+.team-img {
+  max-width: 100%;
+  height: auto;
+  object-fit: cover;
+  max-height: 300px; /* Ajusta este valor según el tamaño deseado */
+}
