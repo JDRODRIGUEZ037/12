@@ -1,38 +1,42 @@
 import React from "react";
 import { BsFillHeartFill } from "react-icons/bs";
+import { FaComment, FaShareAlt } from "react-icons/fa"; // Importa iconos para comentarios y compartidos
 
-function CardMain({ imgSrc, title, hearts }) {
+// Asegúrate de que esta sea la ÚNICA definición de la función CardMain en este archivo
+function CardMain({ imgSrc, publicationTitle, totalLikes, totalComments, totalShares }) {
   return (
     <div className="card_main">
-      <img src={imgSrc} alt="" className="card_main_img" />
+      <img src={imgSrc} alt="Imagen de Publicación" className="card_main_img" />
       <div className="card_main_name">
-        <h2>{title}</h2>
+        <h2>{publicationTitle}</h2>
         <div className="card_main_icon">
+          {/* Likes se mantienen aquí */}
           <i>
-            <BsFillHeartFill /> <span>{hearts}</span>
+            <BsFillHeartFill /> <span>{totalLikes}</span>
           </i>
         </div>
       </div>
 
+      {/* SECCIÓN STAT CON COMENTARIOS Y COMPARTIDOS */}
       <div className="stat">
         <div>
           <p>
-            Current Bid<span>1.2 ETH</span>
+            Comentarios<span>{totalComments}</span>
           </p>
         </div>
         <div>
           <p>
-            Ending In<span>1d:12h:10m</span>
+            Compartidos<span>{totalShares}</span>
           </p>
         </div>
       </div>
 
       <div className="card_main_button">
         <a href="#" className="button btn">
-          Place a Bid
+          Stats
         </a>
         <a href="#" className="button2 btn">
-          History
+          More
         </a>
       </div>
     </div>
