@@ -1,13 +1,11 @@
-import logo from "./logo.svg";
+import React from "react";
 import "./App.css";
-import Menu from "./Components/Menu";
-import Container from "./Components/Container";
+import SecureDashboard from "./Components/SecureDashboard";
 
 function App() {
   return (
     <div className="App">
-      <Menu />
-      <Container />
+      <SecureDashboard />
     </div>
   );
 }
