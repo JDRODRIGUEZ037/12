@@ -1,0 +1,18 @@
+.App {
+  min-height: 100vh;
+  margin: 0;
+  padding: 32px;
+  background: radial-gradient(circle at top left, #1f2937 0%, #0b1120 45%, #020617 100%);
+  font-family: "Inter", "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+  color: #f8fafc;
+  display: flex;
+  justify-content: center;
+  align-items: flex-start;
+  box-sizing: border-box;
+}
+
+@media (max-width: 768px) {
+  .App {
+    padding: 16px;
+  }
+}
