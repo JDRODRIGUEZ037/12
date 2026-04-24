@@ -1,4 +1,4 @@
-import { Controller, Get, Query, Res, HttpStatus } from '@nestjs/common';
+import { Controller, Get, Post, Body, Query, Res, HttpStatus, Param } from '@nestjs/common';
 import { InstagramService } from './instagram.service';
 import type { Response } from 'express';
 
@@ -20,6 +20,35 @@ export class InstagramController {
   @Get('posts')
   async getPosts(@Query('userId') userId: string = 'default-user') {
     return await this.instagramService.getRecentPosts(userId);
+  }
+
+  @Post('publish')
+  async publish(
+    @Body('imageUrl') imageUrl: string,
+    @Body('caption') caption: string,
+    @Body('userId') userId: string = 'default-user',
+  ) {
+    try {
+      if (!imageUrl) {
+        return { error: 'Se requiere una URL pública de imagen para Instagram.' };
+      }
+      return await this.instagramService.publishPost(userId, imageUrl, caption);
+    } catch (error) {
+      return { error: error.message };
+    }
+  }
+
+  @Get('posts/:postId/comments')
+  async getPostComments(
+    @Param('postId') postId: string,
+    @Query('userId') userId: string = 'default-user',
+  ) {
+    return await this.instagramService.getPostComments(postId, userId);
+  }
+
+  @Get('conversations')
+  async getConversations(@Query('userId') userId: string = 'default-user') {
+    return await this.instagramService.getConversations(userId);
   }
 
   @Get('callback')

@@ -44,7 +44,9 @@ export function CreatePost() {
   const [aiTone, setAiTone] = useState("profesional");
   const [isGenerating, setIsGenerating] = useState(false);
   const [uploadedImage, setUploadedImage] = useState<string | null>(null);
+  const [publicImageUrl, setPublicImageUrl] = useState(""); // URL string for FB Graph API MVP
   const [selectedFilter, setSelectedFilter] = useState("original");
+  const [isPublishing, setIsPublishing] = useState(false);
 
   const togglePlatform = (platformId: string) => {
     setSelectedPlatforms(prev =>
@@ -54,7 +56,7 @@ export function CreatePost() {
     );
   };
 
-  const handlePublishNow = () => {
+  const handlePublishNow = async () => {
     if (!content.trim()) {
       toast.error("Por favor escribe contenido para el post");
       return;
@@ -63,8 +65,40 @@ export function CreatePost() {
       toast.error("Selecciona al menos una plataforma");
       return;
     }
-    toast.success("¡Post publicado exitosamente!");
-    setContent("");
+    if (!publicImageUrl.trim()) {
+      toast.error("Para poder publicarlo de verdad en Meta, necesitas ingresar una URL pública de imagen.");
+      return;
+    }
+
+    setIsPublishing(true);
+    toast.loading("Publicando en Instagram (esto puede tardar unos segundos)...", { id: "publish-toast" });
+
+    try {
+      const response = await fetch("http://localhost:3000/instagram/publish", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          imageUrl: publicImageUrl,
+          caption: content,
+          userId: "default-user" // Mock auth user
+        })
+      });
+
+      const data = await response.json();
+
+      if (data.error) {
+        toast.error(`Error de Instagram: ${data.error}`, { id: "publish-toast" });
+      } else {
+        toast.success(`¡Post publicado exitosamente en tu cuenta!`, { id: "publish-toast" });
+        setContent("");
+        setPublicImageUrl("");
+        setUploadedImage(null);
+      }
+    } catch (err) {
+      toast.error("Error de conexión con el backend.", { id: "publish-toast" });
+    } finally {
+      setIsPublishing(false);
+    }
   };
 
   const handleSchedule = () => {
@@ -277,6 +311,23 @@ export function CreatePost() {
 
               <TabsContent value="image" className="space-y-4">
                 {/* Image Upload Area */}
+                <div>
+                  <Label htmlFor="image-url" className="text-sm mb-2 block text-gray-700">
+                    URL Pública de la Imagen (Facebook requiere links públicos para publicar)
+                  </Label>
+                  <Input
+                    id="image-url"
+                    placeholder="Ej: https://un-sitio.com/tu-foto.jpg"
+                    value={publicImageUrl}
+                    onChange={(e) => {
+                      setPublicImageUrl(e.target.value);
+                      if (e.target.value.startsWith("http")) {
+                        setUploadedImage(e.target.value);
+                      }
+                    }}
+                    className="bg-white mb-4"
+                  />
+                </div>
                 {!uploadedImage ? (
                   <div
                     onDrop={handleDrop}
@@ -454,10 +505,15 @@ export function CreatePost() {
           <div className="flex items-center gap-3">
             <Button 
               onClick={handlePublishNow}
+              disabled={isPublishing}
               className="bg-blue-600 hover:bg-blue-700 flex-1"
             >
-              <Send className="w-4 h-4 mr-2" />
-              Publicar Ahora
+              {isPublishing ? (
+                <RefreshCw className="w-4 h-4 mr-2 animate-spin" />
+              ) : (
+                <Send className="w-4 h-4 mr-2" />
+              )}
+              {isPublishing ? "Publicando..." : "Publicar Ahora"}
             </Button>
             <Button 
               onClick={handleSchedule}

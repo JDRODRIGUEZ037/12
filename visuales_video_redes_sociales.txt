@@ -1,0 +1,152 @@
+GUION DE VISUALES - PLATAFORMA DE GESTIÓN DE REDES SOCIALES (2 MINUTOS)
+========================================================
+Estilo general recomendado:
+- Paleta oscura / dark mode con acentos en violeta, azul eléctrico o verde neón
+- Estética tech-moderna: glassmorphism, gradientes suaves, UI limpia
+- Ritmo de corte: dinámico pero no agresivo (cortes cada 2-4 segundos)
+- Música: electrónica minimalista, progresiva, sin letra
+========================================================
+
+
+[0:00 - 0:10 | GANCHO]
+
+VISUAL IDEA:
+- Pantalla dividida en 4 cuadrantes mostrando tabs abiertas de Instagram, Facebook,
+  TikTok y un Excel con métricas. Todo desordenado, caótico.
+- Una mano en el mouse saltando desesperadamente de ventana en ventana.
+- Texto animado en pantalla: "¿Cuántas horas pierdes así cada semana?"
+- Corte brusco al negro. Silencio un instante. Luego arranca la música.
+
+EFECTO RECOMENDADO:
+- Cámara levemente temblorosa para transmitir estrés.
+- Saturación de colores alta (como sobreestimulación).
+
+
+[0:10 - 0:25 | PROBLEMA]
+
+VISUAL IDEA:
+- Plano de una persona frente a múltiples pantallas, abrumada, con notificaciones
+  acumulándose en tiempo real (animación de badges rojos que no paran de crecer).
+- Corte a un reloj corriendo mientras los mensajes sin responder se acumulan.
+- Corte a un jefe o cliente preguntando "¿por qué no respondiste esto?"
+- Breve paneo de un calendario lleno de tareas manuales de redes.
+
+EFECTO RECOMENDADO:
+- Tono desaturado, frío, grisáceo. Que se sienta el agotamiento.
+- Fast-cuts de 1 segundo por escena para generar ansiedad visual.
+
+
+[0:25 - 0:40 | PRESENTACIÓN DEL PRODUCTO]
+
+VISUAL IDEA:
+- Transición: la pantalla caótica se "colapsa" y desaparece en un zoom out.
+- Aparece el dashboard de la plataforma limpio, oscuro, con gradientes.
+  Animación de entrada suave (fade + scale).
+- Logo o nombre del producto aparece centrado con un brillo sutil detrás.
+- Tagline animado letra por letra: "Todo tu mundo digital. Un solo lugar."
+
+EFECTO RECOMENDADO:
+- Cambio total de paleta: de gris frío a azul/violeta oscuro con detalles luminosos.
+- Música sube levemente de energía. Momento de alivio visual.
+
+
+[0:40 - 1:05 | CÓMO FUNCIONA]
+
+VISUAL IDEA (secuencia de 3 escenas):
+
+Escena 1 - Conexión (10 seg):
+  - Screen recording del flujo de conexión de Instagram a la plataforma.
+  - Animación de íconos de redes sociales "entrando" al panel central
+    como si fueran jalados por un imán.
+
+Escena 2 - Panel principal (10 seg):
+  - Zoom in al dashboard mostrando métricas en tiempo real (seguidores,
+    alcance, engagement). Números que suben animadamente.
+  - Inbox unificado con mensajes apareciendo en tiempo real de distintas redes.
+
+Escena 3 - Publicación programada (5 seg):
+  - Mano seleccionando imagen, escribiendo caption, eligiendo hora.
+  - Botón "Programar" con animación de confirmación satisfactoria (✓ + confeti sutil).
+
+EFECTO RECOMENDADO:
+- Screen recordings reales de la plataforma o mockups animados en After Effects / MotionArray.
+- Cursor animado que guía la mirada del espectador.
+
+
+[1:05 - 1:30 | BENEFICIOS CLAVE]
+
+VISUAL IDEA (3 bloques de beneficio, ~8 seg cada uno):
+
+Beneficio 1 - Ahorro de tiempo:
+  - Animación de un reloj que avanza rápido y luego se detiene.
+  - Ícono de check verde. Texto aparece: "Menos tiempo operativo. Más tiempo estratégico."
+
+Beneficio 2 - Inbox unificado:
+  - Animación de mensajes de Instagram, Facebook y más confluyendo
+    en un solo punto central luminoso.
+  - Cara de cliente satisfecho (stock o ilustración) con respuesta rápida.
+
+Beneficio 3 - Decisiones con datos:
+  - Gráfica de barras o líneas que sube progresivamente.
+  - Texto: "Sabes qué publicar, cuándo y para quién."
+
+EFECTO RECOMENDADO:
+- Íconos minimalistas, animados con microinteracciones (rebote suave, fade in).
+- Fondo oscuro con cada beneficio en una "tarjeta" con glassmorphism.
+
+
+[1:30 - 1:45 | DIFERENCIAL]
+
+VISUAL IDEA:
+- Pantalla dividida: lado izquierdo muestra el método manual
+  (múltiples apps abiertas, Excel, caos). Lado derecho: nuestra plataforma limpia.
+- Línea divisoria en el centro que se desplaza hacia la izquierda
+  como "eliminando" el caos.
+- Texto sobre el lado derecho: "Una plataforma. Todo el control."
+- Animación de íconos de seguridad / API oficial (candado, escudo, verificado).
+
+EFECTO RECOMENDADO:
+- Comparativa visual clara. Sin palabras adicionales, que la imagen hable.
+- El lado del caos en blanco y negro. El lado de la plataforma en full color.
+
+
+[1:45 - 1:55 | PRUEBA Y CREDIBILIDAD]
+
+VISUAL IDEA:
+- Animación de contador: "60% menos tiempo operativo" con número
+  que sube de 0% a 60% en 2 segundos.
+- Breve clip (3 seg) de una persona real o actor frente al computador,
+  sonriendo, con el dashboard de la plataforma visible en pantalla.
+- Frase en pantalla: "Más respuestas. Más comunidad. Más crecimiento."
+- Pequeño logo de "Verificado" o "Beta validada con usuarios reales".
+
+EFECTO RECOMENDADO:
+- Tipografía grande, bold, que golpee.
+- Fondo con gradiente cálido (azul a violeta) para transmitir confianza.
+
+
+[1:55 - 2:00 | LLAMADO A LA ACCIÓN]
+
+VISUAL IDEA:
+- URL o nombre de la plataforma aparece centrado con animación de entrada.
+- Botón animado: "Agenda tu demo gratis →" pulsando suavemente.
+- El dashboard de la plataforma en segundo plano, levemente desenfocado.
+- Último frame: logo + tagline + link. Estático 2 segundos.
+
+EFECTO RECOMENDADO:
+- Música llega a su punto más alto y luego baja suave al silencio.
+- Sin saturar con texto. Solo lo esencial. Que el CTA respire.
+
+
+========================================================
+NOTAS GENERALES DE PRODUCCIÓN:
+
+Herramientas sugeridas para crear el video:
+  - CapCut Pro / Premiere Pro para edición
+  - After Effects o Jitter.video para animaciones de UI
+  - Figma + ScreenStudio para screen recordings premium
+  - Pexels / Unsplash para stock de personas (si no hay actores)
+  - ElevenLabs / Murf.ai para la voz en off con IA
+
+Ratio recomendado: 16:9 (YouTube / web) o versión 9:16 para Reels / TikTok
+========================================================
