@@ -1,13 +1,17 @@
+stages:
+  - deploy
+
 image: node:20-alpine
 
 pages:
   stage: deploy
   script:
-    - cd "app version 2/figma_mockup"
+    - cd 'app version 2/figma_mockup'
     - npm install
     - npm run build
     - cd ../..
-    - mv "app version 2/figma_mockup/dist" public
+    - rm -rf public
+    - mv 'app version 2/figma_mockup/dist' public
   artifacts:
     paths:
       - public
