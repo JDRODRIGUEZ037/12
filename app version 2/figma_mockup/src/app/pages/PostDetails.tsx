@@ -116,7 +116,7 @@ export function PostDetails() {
     <div className="p-8 max-w-7xl mx-auto">
       {/* Top Nav */}
       <div className="mb-6">
-        <Link to="/" className="inline-flex items-center text-sm font-medium text-gray-500 hover:text-gray-900 transition-colors">
+        <Link to="/app" className="inline-flex items-center text-sm font-medium text-gray-500 hover:text-gray-900 transition-colors">
           <ArrowLeft className="w-4 h-4 mr-2" />
           Volver al Dashboard
         </Link>

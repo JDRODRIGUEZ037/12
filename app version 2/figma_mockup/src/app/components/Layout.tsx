@@ -21,13 +21,13 @@ export function Layout() {
   const location = useLocation();
   
   const navItems = [
-    { path: "/", icon: LayoutDashboard, label: "Dashboard" },
-    { path: "/scheduler", icon: Calendar, label: "Programador" },
-    { path: "/create", icon: PlusCircle, label: "Crear Post" },
-    { path: "/drafts", icon: FileText, label: "Borradores" },
-    { path: "/inbox", icon: MessageSquare, label: "Mensajes" },
-    { path: "/accounts", icon: Users, label: "Cuentas" },
-    { path: "/analytics", icon: BarChart3, label: "Analíticas" },
+    { path: "/app", icon: LayoutDashboard, label: "Dashboard" },
+    { path: "/app/scheduler", icon: Calendar, label: "Programador" },
+    { path: "/app/create", icon: PlusCircle, label: "Crear Post" },
+    { path: "/app/drafts", icon: FileText, label: "Borradores" },
+    { path: "/app/inbox", icon: MessageSquare, label: "Mensajes" },
+    { path: "/app/accounts", icon: Users, label: "Cuentas" },
+    { path: "/app/analytics", icon: BarChart3, label: "Analíticas" },
   ];
 
   return (
@@ -79,7 +79,7 @@ export function Layout() {
             </DropdownMenuTrigger>
             <DropdownMenuContent align="end" className="w-56">
               <DropdownMenuItem asChild>
-                <Link to="/settings" className="cursor-pointer w-full block">Configuración</Link>
+                <Link to="/app/settings" className="cursor-pointer w-full block">Configuración</Link>
               </DropdownMenuItem>
               <DropdownMenuSeparator />
               <DropdownMenuItem className="text-red-600 cursor-pointer">

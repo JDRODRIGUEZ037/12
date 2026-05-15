@@ -9,10 +9,15 @@ import { Inbox } from "./pages/Inbox";
 import { Settings } from "./pages/Settings";
 import { Drafts } from "./pages/Drafts";
 import { Layout } from "./components/Layout";
+import LandingPage from "./pages/LandingPage";
 
 export const router = createBrowserRouter([
   {
     path: "/",
+    Component: LandingPage,
+  },
+  {
+    path: "/app",
     Component: Layout,
     children: [
       { index: true, Component: Dashboard },
