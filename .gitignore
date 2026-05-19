@@ -1,0 +1,17 @@
+# Ignorar node_modules en todo el monorepo
+**/node_modules/
+
+# Ignorar carpetas de distribución compiladas localmente
+**/dist/
+**/build/
+**/coverage/
+
+# Archivos de entorno y variables locales
+**/.env
+**/.env.local
+**/.env.*.local
+
+# Archivos del Sistema Operativo
+.DS_Store
+Thumbs.db
+*.log
