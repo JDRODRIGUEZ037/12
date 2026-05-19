@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { API_BASE_URL } from '../config';
 import { Card } from "../components/ui/card";
 import { Button } from "../components/ui/button";
 import { Textarea } from "../components/ui/textarea";
@@ -74,7 +75,7 @@ export function CreatePost() {
     toast.loading("Publicando en Instagram (esto puede tardar unos segundos)...", { id: "publish-toast" });
 
     try {
-      const response = await fetch("http://localhost:3000/instagram/publish", {
+      const response = await fetch(`${API_BASE_URL}/instagram/publish`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({

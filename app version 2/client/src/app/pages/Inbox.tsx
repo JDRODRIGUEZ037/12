@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { Card } from "../components/ui/card";
+import { API_BASE_URL } from '../config';
 import { Button } from "../components/ui/button";
 import { 
   MessageSquare, AtSign, Mail, Star, Archive, Trash2, Send, Heart, 
@@ -13,7 +14,7 @@ export function Inbox() {
   const [selectedConv, setSelectedConv] = useState<any>(null);
 
   useEffect(() => {
-    fetch('http://localhost:3000/instagram/conversations')
+    fetch(`${API_BASE_URL}/instagram/conversations`)
       .then(res => res.json())
       .then(data => {
         setConversations(data);

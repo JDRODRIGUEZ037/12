@@ -1,5 +1,6 @@
 import { Card } from "../components/ui/card";
 import { Link } from "react-router";
+import { API_BASE_URL } from '../config';
 import { 
   TrendingUp, 
   Users, 
@@ -96,8 +97,8 @@ export function Dashboard() {
     const fetchDashboardData = async () => {
       try {
         const [postsRes, accountsRes] = await Promise.all([
-          fetch("http://localhost:3000/instagram/posts"),
-          fetch("http://localhost:3000/instagram/accounts")
+          fetch(`${API_BASE_URL}/instagram/posts`),
+          fetch(`${API_BASE_URL}/instagram/accounts`)
         ]);
         
         const postsData = await postsRes.json();

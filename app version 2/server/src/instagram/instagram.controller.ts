@@ -66,10 +66,12 @@ export class InstagramController {
 
     try {
       const account = await this.instagramService.handleCallback(code, tenantId, userId);
+      const clientUrl = process.env.CLIENT_URL || 'http://localhost:5173';
       // Redirect back to frontend dashboard
-      return res.redirect(`http://localhost:5173/accounts?status=success&accountId=${account.id}`);
+      return res.redirect(`${clientUrl}/accounts?status=success&accountId=${account.id}`);
     } catch (error) {
-      return res.redirect(`http://localhost:5173/accounts?status=error&message=${encodeURIComponent(error.message)}`);
+      const clientUrl = process.env.CLIENT_URL || 'http://localhost:5173';
+      return res.redirect(`${clientUrl}/accounts?status=error&message=${encodeURIComponent(error.message)}`);
     }
   }
 }

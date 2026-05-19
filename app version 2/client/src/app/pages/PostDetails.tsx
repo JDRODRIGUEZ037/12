@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { Card } from "../components/ui/card";
 import { Button } from "../components/ui/button";
 import { Link, useParams } from "react-router";
+import { API_BASE_URL } from '../config';
 import { 
   ArrowLeft, Instagram, Heart, MessageCircle, Share2, Eye, MapPin, Image as ImageIcon, TrendingUp 
 } from "lucide-react";
@@ -22,13 +23,13 @@ export function PostDetails() {
   useEffect(() => {
     const fetchPostAndComments = async () => {
       try {
-        const response = await fetch("http://localhost:3000/instagram/posts?userId=default-user");
+        const response = await fetch(`${API_BASE_URL}/instagram/posts?userId=default-user`);
         const data = await response.json();
         const found = data.find((p: any) => p.id === id);
         setPost(found);
 
         if (found) {
-          const commentsRes = await fetch(`http://localhost:3000/instagram/posts/${found.id}/comments?userId=default-user`);
+          const commentsRes = await fetch(`${API_BASE_URL}/instagram/posts/${found.id}/comments?userId=default-user`);
           const commentsData = await commentsRes.json();
           setCommentsList(commentsData || []);
         }
