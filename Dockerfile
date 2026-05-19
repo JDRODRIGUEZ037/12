@@ -3,12 +3,13 @@ FROM node:20-alpine AS builder
 
 WORKDIR /app
 
-# Copy package files from the subfolder (using array format to handle folder spaces)
-COPY ["app version 2/server/package.json", "app version 2/server/package-lock.json", "./"]
+# Copy package files from the subfolder (Separated to prevent Docker edge cases with spaces in paths)
+COPY ["app version 2/server/package.json", "./"]
+COPY ["app version 2/server/package-lock.json", "./"]
 COPY ["app version 2/server/prisma", "./prisma/"]
 
-# Install all dependencies (including devDependencies)
-RUN npm ci
+# Install all dependencies
+RUN npm install
 
 # Copy the rest of the server code from the subfolder
 COPY ["app version 2/server", "./"]
@@ -23,11 +24,12 @@ FROM node:20-alpine AS runner
 WORKDIR /app
 
 # Copy package files and prisma directory
-COPY ["app version 2/server/package.json", "app version 2/server/package-lock.json", "./"]
+COPY ["app version 2/server/package.json", "./"]
+COPY ["app version 2/server/package-lock.json", "./"]
 COPY ["app version 2/server/prisma", "./prisma/"]
 
 # Install only production dependencies
-RUN npm ci --only=production
+RUN npm install --omit=dev
 
 # Copy generated Prisma Client and built application files from builder stage
 COPY --from=builder /app/node_modules/.prisma ./node_modules/.prisma
