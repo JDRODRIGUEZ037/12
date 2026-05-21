@@ -1,9 +1,17 @@
 import { NestFactory } from '@nestjs/core';
 import { AppModule } from './app.module';
 
+// Autocuración defensiva de variables de entorno con espacios en blanco al inicio o al final
+for (const key of Object.keys(process.env)) {
+  const trimmedKey = key.trim();
+  if (trimmedKey !== key) {
+    process.env[trimmedKey] = process.env[key];
+  }
+}
+
 async function bootstrap() {
   console.log('--- DIAGNOSTIC START ---');
-  console.log('Environment keys:', Object.keys(process.env));
+  console.log('Environment keys (trimmed/normalized):', Object.keys(process.env));
   console.log('META_APP_ID exists:', !!process.env.META_APP_ID, 'Value is:', process.env.META_APP_ID);
   console.log('DATABASE_URL exists:', !!process.env.DATABASE_URL, 'Value length is:', process.env.DATABASE_URL?.length);
   console.log('--- DIAGNOSTIC END ---');
@@ -13,4 +21,5 @@ async function bootstrap() {
   await app.listen(process.env.PORT ?? 3000);
 }
 bootstrap();
+
 
