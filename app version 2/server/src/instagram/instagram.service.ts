@@ -18,8 +18,8 @@ export class InstagramService {
   }
 
   getLoginUrl() {
-    const appId = this.configService.get('META_APP_ID');
-    const redirectUri = this.configService.get('META_REDIRECT_URI');
+    const appId = this.configService.get('META_APP_ID') || process.env.META_APP_ID;
+    const redirectUri = this.configService.get('META_REDIRECT_URI') || process.env.META_REDIRECT_URI;
     
     // Scopes needed for Instagram Social Dashboard
     const scopes = [
@@ -39,9 +39,9 @@ export class InstagramService {
   }
 
   async handleCallback(code: string, tenantId: string, userId: string) {
-    const appId = this.configService.get('META_APP_ID');
-    const appSecret = this.configService.get('META_APP_SECRET');
-    const redirectUri = this.configService.get('META_REDIRECT_URI');
+    const appId = this.configService.get('META_APP_ID') || process.env.META_APP_ID;
+    const appSecret = this.configService.get('META_APP_SECRET') || process.env.META_APP_SECRET;
+    const redirectUri = this.configService.get('META_REDIRECT_URI') || process.env.META_REDIRECT_URI;
 
     try {
       // 1. Exchange code for Short-Lived Access Token
