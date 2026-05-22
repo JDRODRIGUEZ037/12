@@ -1,5 +1,6 @@
 stages:
   - build-db
+  - build-backend
   - deploy
 
 variables:
@@ -15,6 +16,19 @@ build-database-image:
   script:
     - docker build -t $CI_REGISTRY_IMAGE/supabase-db:latest -f database/Dockerfile database/
     - docker push $CI_REGISTRY_IMAGE/supabase-db:latest
+  only:
+    - main
+
+build-backend-image:
+  stage: build-backend
+  image: docker:24.0.5
+  services:
+    - docker:24.0.5-dind
+  before_script:
+    - echo "$CI_REGISTRY_PASSWORD" | docker login -u "$CI_REGISTRY_USER" --password-stdin $CI_REGISTRY
+  script:
+    - docker build -t $CI_REGISTRY_IMAGE/backend:latest -f "app version 2/server/Dockerfile" "app version 2/server/"
+    - docker push $CI_REGISTRY_IMAGE/backend:latest
   only:
     - main
 
