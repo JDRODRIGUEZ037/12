@@ -60,18 +60,7 @@ export class AIService {
     // y crea imágenes reales de Stable Diffusion basadas en el prompt exacto del usuario.
     const cleanPrompt = encodeURIComponent(prompt.trim());
     const seed = Math.floor(Math.random() * 999999);
-    const imageUrl = `https://image.pollinations.ai/prompt/${cleanPrompt}?width=1080&height=1080&nologo=true&seed=${seed}&enhance=true`;
-    
-    // Verificamos brevemente que el servicio esté disponible haciendo un HEAD request rápido
-    try {
-      await axios.head(imageUrl, { timeout: 4000 });
-      return imageUrl;
-    } catch (e) {
-      this.logger.warn('Error al verificar Pollinations AI, utilizando fallback estético.', e.message);
-      // Fallback a una imagen de Unsplash de alta resolución sobre el tema
-      const query = prompt.split(' ').slice(0, 3).join(',');
-      return `https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?w=1080&auto=format&fit=crop&q=80&sig=${seed}`;
-    }
+    return `https://image.pollinations.ai/prompt/${cleanPrompt}?width=1080&height=1080&nologo=true&seed=${seed}&enhance=true`;
   }
 
   private getLocalCopyFallback(prompt: string, tone: string): string {
