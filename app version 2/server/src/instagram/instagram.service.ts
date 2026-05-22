@@ -17,7 +17,7 @@ export class InstagramService {
     return this.prisma.socialAccount.findMany();
   }
 
-  getLoginUrl() {
+  getLoginUrl(redirectBack?: string) {
     const appId = this.configService.get('META_APP_ID') || process.env.META_APP_ID;
     const redirectUri = this.configService.get('META_REDIRECT_URI') || process.env.META_REDIRECT_URI;
     
@@ -34,7 +34,12 @@ export class InstagramService {
       'public_profile',
     ].join(',');
 
-    const url = `https://www.facebook.com/v21.0/dialog/oauth?client_id=${appId}&redirect_uri=${redirectUri}&scope=${scopes}&response_type=code`;
+    let url = `https://www.facebook.com/v21.0/dialog/oauth?client_id=${appId}&redirect_uri=${redirectUri}&scope=${scopes}&response_type=code`;
+    if (redirectBack) {
+      // Base64 encode the redirect URL to safely pass it as state parameter
+      const state = Buffer.from(redirectBack).toString('base64');
+      url += `&state=${state}`;
+    }
     this.logger.log(`Generando URL de Login: ${url}`);
     return url;
   }

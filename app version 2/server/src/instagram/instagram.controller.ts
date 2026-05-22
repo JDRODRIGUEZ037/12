@@ -7,8 +7,11 @@ export class InstagramController {
   constructor(private readonly instagramService: InstagramService) {}
 
   @Get('login')
-  async login(@Res() res: Response) {
-    const url = this.instagramService.getLoginUrl();
+  async login(
+    @Query('redirect_back') redirectBack: string,
+    @Res() res: Response,
+  ) {
+    const url = this.instagramService.getLoginUrl(redirectBack);
     return res.redirect(url);
   }
 
@@ -54,6 +57,7 @@ export class InstagramController {
   @Get('callback')
   async callback(
     @Query('code') code: string,
+    @Query('state') state: string,
     @Res() res: Response,
     // Note: These should ideally come from the session or JWT
     // For the MVP/POC we might use query params or defaults
@@ -64,13 +68,39 @@ export class InstagramController {
       return res.status(HttpStatus.BAD_REQUEST).json({ error: 'No code provided from Meta' });
     }
 
+    // Determine target client URL for redirection
+    let clientUrl = 'http://localhost:5173';
+    const rawClientUrls = process.env.CLIENT_URL || '';
+    const allowedOrigins = rawClientUrls
+      ? rawClientUrls.split(',').map((u) => u.trim())
+      : ['http://localhost:5173', 'http://localhost:3000'];
+
+    if (state) {
+      try {
+        const decoded = Buffer.from(state, 'base64').toString('utf-8');
+        // Validate that decoded URL matches one of the allowed origins or localhost
+        const isAllowed =
+          allowedOrigins.some((origin) => decoded.startsWith(origin)) ||
+          decoded.startsWith('http://localhost:5173') ||
+          decoded.startsWith('http://localhost:3000');
+          
+        if (isAllowed) {
+          clientUrl = decoded.replace(/\/+$/, '');
+        } else {
+          clientUrl = allowedOrigins[0] || 'http://localhost:5173';
+        }
+      } catch (err) {
+        clientUrl = allowedOrigins[0] || 'http://localhost:5173';
+      }
+    } else {
+      clientUrl = allowedOrigins[0] || 'http://localhost:5173';
+    }
+
     try {
       const account = await this.instagramService.handleCallback(code, tenantId, userId);
-      const clientUrl = process.env.CLIENT_URL || 'http://localhost:5173';
       // Redirect back to frontend dashboard
       return res.redirect(`${clientUrl}/app/accounts?status=success&accountId=${account.id}`);
     } catch (error) {
-      const clientUrl = process.env.CLIENT_URL || 'http://localhost:5173';
       return res.redirect(`${clientUrl}/app/accounts?status=error&message=${encodeURIComponent(error.message)}`);
     }
   }

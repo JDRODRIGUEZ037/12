@@ -49,7 +49,7 @@ export function Accounts() {
   }, [searchParams]);
 
   const handleConnect = () => {
-    window.location.href = `${API_BASE_URL}/instagram/login`;
+    window.location.href = `${API_BASE_URL}/instagram/login?redirect_back=${window.location.origin}`;
   };
 
   const handleDisconnect = async () => {
