@@ -41,4 +41,4 @@ ENV PORT=3000
 EXPOSE 3000
 
 # Command to run the NestJS server
-CMD ["node", "dist/main"]
+CMD ["node", "dist/src/main"]
