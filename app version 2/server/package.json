@@ -7,7 +7,8 @@
   "license": "UNLICENSED",
   "scripts": {
     "build": "nest build",
-    "vercel-build": "prisma generate && nest build",
+    "postbuild": "node scripts/create-dist-redirect.js",
+    "vercel-build": "prisma generate && nest build && node scripts/create-dist-redirect.js",
     "format": "prettier --write \"src/**/*.ts\" \"test/**/*.ts\"",
     "start": "nest start",
     "start:dev": "nest start --watch",
