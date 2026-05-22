@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { Card } from "../components/ui/card";
 import { API_BASE_URL } from '../config';
 import { Button } from "../components/ui/button";
@@ -14,18 +14,44 @@ export function Inbox() {
   const [selectedConv, setSelectedConv] = useState<any>(null);
   const [replyText, setReplyText] = useState('');
 
+  const selectedConvRef = useRef(selectedConv);
   useEffect(() => {
-    fetch(`${API_BASE_URL}/instagram/conversations`)
-      .then(res => res.json())
-      .then(data => {
-        setConversations(data);
-        if (data.length > 0) setSelectedConv(data[0]);
-        setLoading(false);
-      })
-      .catch(err => {
-        console.error('Error fetching conversations:', err);
-        setLoading(false);
-      });
+    selectedConvRef.current = selectedConv;
+  }, [selectedConv]);
+
+  useEffect(() => {
+    const loadConversations = (isInitial = false) => {
+      if (isInitial) setLoading(true);
+      fetch(`${API_BASE_URL}/instagram/conversations`)
+        .then(res => res.json())
+        .then(data => {
+          setConversations(data);
+          
+          const currentSelected = selectedConvRef.current;
+          if (isInitial && data.length > 0) {
+            setSelectedConv(data[0]);
+          } else if (!isInitial && currentSelected) {
+            const updated = data.find((c: any) => c.id === currentSelected.id);
+            if (updated) {
+              setSelectedConv(updated);
+            }
+          }
+          
+          if (isInitial) setLoading(false);
+        })
+        .catch(err => {
+          console.error('Error fetching conversations:', err);
+          if (isInitial) setLoading(false);
+        });
+    };
+
+    loadConversations(true);
+
+    const interval = setInterval(() => {
+      loadConversations(false);
+    }, 5000);
+
+    return () => clearInterval(interval);
   }, []);
 
   const filteredConversations = conversations.filter(conv => {
