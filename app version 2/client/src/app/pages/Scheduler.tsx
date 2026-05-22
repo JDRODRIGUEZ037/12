@@ -137,17 +137,19 @@ export function Scheduler() {
         </Button>
       </div>
 
-      <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+      <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 items-start">
         {/* Calendar */}
         <Card className="p-6 lg:col-span-1">
           <h2 className="text-lg font-semibold text-gray-900 mb-4">Calendario</h2>
-          <Calendar
-            mode="single"
-            selected={selectedDate}
-            onSelect={setSelectedDate}
-            locale={es}
-            className="rounded-md border"
-          />
+          <div className="w-full border border-gray-100 rounded-xl p-4 bg-gray-50/30">
+            <Calendar
+              mode="single"
+              selected={selectedDate}
+              onSelect={setSelectedDate}
+              locale={es}
+              className="w-full"
+            />
+          </div>
           
           <div className="mt-6 space-y-3">
             <div className="flex items-center justify-between text-sm">

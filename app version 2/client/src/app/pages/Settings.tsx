@@ -5,8 +5,9 @@ import { Input } from "../components/ui/input";
 import { Switch } from "../components/ui/switch";
 import { Tabs, TabsList, TabsTrigger, TabsContent } from "../components/ui/tabs";
 import { 
-  User, Bell, Users, CreditCard, Crown, Check, Trash2, Plus, Lock 
+  User, Bell, Users, CreditCard, Crown, Check, Trash2, Plus, Lock, Mail 
 } from "lucide-react";
+
 
 export function Settings() {
   return (

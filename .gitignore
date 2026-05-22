@@ -15,3 +15,6 @@
 .DS_Store
 Thumbs.db
 *.log
+
+# Herramientas locales y servidores MCP
+/ig-mcp/

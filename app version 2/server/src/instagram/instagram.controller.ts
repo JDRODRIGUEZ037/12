@@ -2,7 +2,7 @@ import { Controller, Get, Post, Body, Query, Res, HttpStatus, Param } from '@nes
 import { InstagramService } from './instagram.service';
 import type { Response } from 'express';
 
-@Controller('instagram')
+@Controller(['instagram', 'facebook'])
 export class InstagramController {
   constructor(private readonly instagramService: InstagramService) {}
 
@@ -73,5 +73,15 @@ export class InstagramController {
       const clientUrl = process.env.CLIENT_URL || 'http://localhost:5173';
       return res.redirect(`${clientUrl}/app/accounts?status=error&message=${encodeURIComponent(error.message)}`);
     }
+  }
+
+  @Get('insights')
+  async getInsights(@Query('userId') userId: string = 'default-user') {
+    return await this.instagramService.getAIInsights(userId);
+  }
+
+  @Post('disconnect')
+  async disconnect(@Body('userId') userId: string = 'default-user') {
+    return await this.instagramService.disconnect(userId);
   }
 }

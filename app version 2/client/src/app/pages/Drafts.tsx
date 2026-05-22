@@ -87,26 +87,28 @@ export function Drafts() {
       </div>
 
       {/* Top Bar */}
-      <div className="flex flex-col md:flex-row gap-6 mb-8">
-        <div className="flex-1">
+      <div className="flex flex-col md:flex-row items-center justify-between gap-6 mb-8 w-full">
+        <div className="flex-1 w-full max-w-xl md:max-w-2xl">
           <div className="relative">
             <Search className="w-5 h-5 text-gray-400 absolute left-4 top-1/2 -translate-y-1/2" />
             <Input 
               placeholder="Buscar en borradores..." 
-              className="pl-12 py-6 bg-gray-50 border-gray-200 text-base rounded-xl w-[80%] max-w-2xl"
+              className="pl-12 py-6 bg-gray-50 border-gray-200 text-base rounded-xl w-full"
             />
           </div>
         </div>
         
-        <Card className="flex items-center justify-between p-4 px-6 min-w-[250px] rounded-xl shadow-sm border-gray-200">
-          <div>
-            <p className="text-sm font-medium text-gray-500 mb-1">Total Borradores</p>
-            <p className="text-3xl font-bold text-gray-900">4</p>
+        <div className="flex-shrink-0 w-full md:w-auto flex justify-end">
+          <div className="flex flex-row items-center gap-3 p-2 px-3.5 rounded-xl border border-gray-200 bg-white shadow-xs">
+            <div className="w-8 h-8 rounded-lg bg-blue-50 flex items-center justify-center flex-shrink-0">
+              <FileText className="w-4.5 h-4.5 text-blue-600" />
+            </div>
+            <div className="flex flex-col">
+              <span className="text-[11px] font-semibold text-gray-500 uppercase tracking-wider leading-none">Total Borradores</span>
+              <span className="text-base font-bold text-gray-900 mt-1 leading-none">4</span>
+            </div>
           </div>
-          <div className="w-12 h-12 rounded-lg bg-blue-50 flex items-center justify-center">
-            <FileText className="w-6 h-6 text-blue-600" />
-          </div>
-        </Card>
+        </div>
       </div>
 
       {/* Grid */}

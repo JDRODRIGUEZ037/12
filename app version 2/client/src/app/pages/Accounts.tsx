@@ -52,6 +52,26 @@ export function Accounts() {
     window.location.href = `${API_BASE_URL}/instagram/login`;
   };
 
+  const handleDisconnect = async () => {
+    if (!window.confirm("¿Estás seguro de que deseas desvincular tu cuenta de Facebook/Instagram?")) {
+      return;
+    }
+    try {
+      const response = await fetch(`${API_BASE_URL}/instagram/disconnect`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ userId: "default-user" }),
+      });
+      if (!response.ok) throw new Error("Error al desvincular");
+      toast.success("Cuenta desvinculada exitosamente.");
+      fetchAccounts();
+    } catch (err) {
+      console.error("Error disconnecting account:", err);
+      toast.error("No se pudo desvincular la cuenta.");
+    }
+  };
+
+
   return (
     <div className="p-8">
       <div className="mb-8 flex items-center justify-between">
@@ -177,10 +197,15 @@ export function Accounts() {
                 <Settings className="w-4 h-4 mr-2" />
                 Configurar
               </Button>
-              <Button variant="outline" className="flex-1">
-                Ver Detalles
+              <Button 
+                variant="outline" 
+                onClick={handleDisconnect}
+                className="flex-1 border-red-200 text-red-600 hover:bg-red-50 hover:text-red-700 hover:border-red-300"
+              >
+                Desvincular
               </Button>
             </div>
+
           </Card>
             );
           })

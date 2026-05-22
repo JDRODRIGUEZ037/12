@@ -7,7 +7,8 @@ import {
   BarChart3,
   Share2,
   FileText,
-  MessageSquare
+  MessageSquare,
+  Sparkles
 } from "lucide-react";
 import { 
   DropdownMenu,
@@ -28,6 +29,7 @@ export function Layout() {
     { path: "/app/inbox", icon: MessageSquare, label: "Mensajes" },
     { path: "/app/accounts", icon: Users, label: "Cuentas" },
     { path: "/app/analytics", icon: BarChart3, label: "Analíticas" },
+    { path: "/app/insights", icon: Sparkles, label: "AI Insights" },
   ];
 
   return (

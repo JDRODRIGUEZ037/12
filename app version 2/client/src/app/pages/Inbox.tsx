@@ -12,6 +12,7 @@ export function Inbox() {
   const [conversations, setConversations] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
   const [selectedConv, setSelectedConv] = useState<any>(null);
+  const [replyText, setReplyText] = useState('');
 
   useEffect(() => {
     fetch(`${API_BASE_URL}/instagram/conversations`)
@@ -26,6 +27,26 @@ export function Inbox() {
         setLoading(false);
       });
   }, []);
+
+  const filteredConversations = conversations.filter(conv => {
+    if (activeTab === 'todos') return true;
+    if (activeTab === 'comments') return conv.type === 'comment';
+    if (activeTab === 'dms') return conv.type === 'dm' || !conv.type;
+    if (activeTab === 'mentions') return conv.type === 'mention';
+    return true;
+  });
+
+  // Automatically update the selected conversation when the active tab changes
+  useEffect(() => {
+    if (filteredConversations.length > 0) {
+      const isStillVisible = filteredConversations.some(c => c.id === selectedConv?.id);
+      if (!isStillVisible) {
+        setSelectedConv(filteredConversations[0]);
+      }
+    } else {
+      setSelectedConv(null);
+    }
+  }, [activeTab, conversations]);
 
   const formatDate = (isoString: string) => {
     const date = new Date(isoString);
@@ -94,10 +115,10 @@ export function Inbox() {
                 <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-500 mb-4"></div>
                 <span>Cargando mensajes...</span>
               </div>
-            ) : conversations.length === 0 ? (
+            ) : filteredConversations.length === 0 ? (
               <div className="text-center p-12 text-gray-500">No hay mensajes recientes</div>
             ) : (
-              conversations.map((conv) => (
+              filteredConversations.map((conv) => (
                 <div 
                   key={conv.id}
                   onClick={() => setSelectedConv(conv)}
@@ -188,29 +209,57 @@ export function Inbox() {
 
                 <div className="border-t border-gray-100 my-6 -mx-6" />
 
-                {/* Inbound Message */}
-                <div className="flex justify-start mb-6">
-                  <div className="bg-white border border-gray-100 rounded-lg rounded-tl-sm p-4 shadow-sm max-w-[70%] text-gray-800 text-[15px] relative">
-                    {selectedConv.last_message}
-                    <div className="text-xs text-gray-400 mt-3 font-medium text-right">{formatDate(selectedConv.timestamp)}</div>
-                  </div>
-                </div>
-
-                {/* Outbound Message - Mocked reaction */}
-                <div className="flex flex-col items-end mb-6 w-full">
-                   <div className="flex items-start gap-4 max-w-[70%]">
-                     <div className="w-8 h-8 rounded-full bg-green-500 text-white text-xs flex items-center justify-center font-bold flex-shrink-0 mt-1">
-                       T
-                     </div>
-                     <div className="bg-blue-50/60 border border-blue-50/80 rounded-lg rounded-tr-sm p-4 text-gray-800 text-[15px] relative">
-                       <div className="font-semibold text-gray-900 mb-1.5 text-sm">
-                         Tú
-                       </div>
-                       ¡Hola! Gracias por contactarnos. ¿En qué podemos ayudarte hoy?
-                       <div className="text-xs text-gray-400 mt-3 font-medium">Recién enviado</div>
-                     </div>
-                   </div>
-                </div>
+                {/* Dynamic Messages Render */}
+                {selectedConv.messages && selectedConv.messages.length > 0 ? (
+                  selectedConv.messages.map((msg: any, idx: number) => {
+                    const isMe = msg.from === 'me';
+                    if (isMe) {
+                      return (
+                        <div key={idx} className="flex flex-col items-end mb-6 w-full">
+                          <div className="flex items-start gap-3 max-w-[70%] justify-end">
+                            <div className="bg-blue-50/70 border border-blue-100 rounded-2xl rounded-tr-xs p-4 text-gray-800 text-[15px] shadow-xs relative">
+                              <div className="font-semibold text-blue-700 mb-1 text-xs">
+                                Tú
+                              </div>
+                              {msg.text}
+                              <div className="text-[10px] text-gray-400 mt-2 font-medium text-right">{formatDate(msg.timestamp)}</div>
+                            </div>
+                            <div className="w-8 h-8 rounded-full bg-blue-600 text-white text-xs flex items-center justify-center font-bold flex-shrink-0 mt-1 shadow-sm">
+                              T
+                            </div>
+                          </div>
+                        </div>
+                      );
+                    } else {
+                      return (
+                        <div key={idx} className="flex justify-start mb-6">
+                          <div className="flex items-start gap-3 max-w-[70%]">
+                            <div className="w-8 h-8 rounded-full bg-indigo-500 text-white text-xs flex items-center justify-center font-bold flex-shrink-0 mt-1 shadow-sm">
+                              {selectedConv.name.substring(0, 2).toUpperCase()}
+                            </div>
+                            <div className="bg-white border border-gray-100 rounded-2xl rounded-tl-xs p-4 shadow-sm text-gray-800 text-[15px] relative">
+                              <div className="font-semibold text-gray-700 mb-1 text-xs">
+                                {selectedConv.name}
+                              </div>
+                              {msg.text}
+                              <div className="text-[10px] text-gray-400 mt-2 font-medium text-right">{formatDate(msg.timestamp)}</div>
+                            </div>
+                          </div>
+                        </div>
+                      );
+                    }
+                  })
+                ) : (
+                  <>
+                    {/* Fallback to legacy single message layout if messages array not populated */}
+                    <div className="flex justify-start mb-6">
+                      <div className="bg-white border border-gray-100 rounded-lg rounded-tl-sm p-4 shadow-sm max-w-[70%] text-gray-800 text-[15px] relative">
+                        {selectedConv.last_message}
+                        <div className="text-xs text-gray-400 mt-3 font-medium text-right">{formatDate(selectedConv.timestamp)}</div>
+                      </div>
+                    </div>
+                  </>
+                )}
 
               </div>
 
@@ -221,6 +270,28 @@ export function Inbox() {
                     className="w-full bg-transparent border-none focus:ring-0 resize-none p-2 text-[15px] text-gray-800 placeholder-gray-400 outline-none"
                     rows={3}
                     placeholder="Escribe tu respuesta..."
+                    value={replyText}
+                    onChange={(e) => setReplyText(e.target.value)}
+                    onKeyDown={(e) => {
+                      if (e.key === 'Enter' && !e.shiftKey) {
+                        e.preventDefault();
+                        if (!replyText.trim()) return;
+                        const newMessage = {
+                          from: 'me',
+                          text: replyText,
+                          timestamp: new Date().toISOString()
+                        };
+                        const updatedConv = {
+                          ...selectedConv,
+                          last_message: replyText,
+                          timestamp: newMessage.timestamp,
+                          messages: [...(selectedConv.messages || []), newMessage]
+                        };
+                        setSelectedConv(updatedConv);
+                        setConversations(prev => prev.map(c => c.id === selectedConv.id ? updatedConv : c));
+                        setReplyText('');
+                      }
+                    }}
                   />
                   <div className="flex items-center justify-between border-t border-gray-100 pt-2.5 mt-1">
                     <div className="flex items-center gap-1">
@@ -231,7 +302,26 @@ export function Inbox() {
                         Plantillas
                       </Button>
                     </div>
-                    <Button className="bg-blue-500 hover:bg-blue-600 text-white rounded-lg px-5 h-9 flex gap-2 font-medium">
+                    <Button 
+                      onClick={() => {
+                        if (!replyText.trim()) return;
+                        const newMessage = {
+                          from: 'me',
+                          text: replyText,
+                          timestamp: new Date().toISOString()
+                        };
+                        const updatedConv = {
+                          ...selectedConv,
+                          last_message: replyText,
+                          timestamp: newMessage.timestamp,
+                          messages: [...(selectedConv.messages || []), newMessage]
+                        };
+                        setSelectedConv(updatedConv);
+                        setConversations(prev => prev.map(c => c.id === selectedConv.id ? updatedConv : c));
+                        setReplyText('');
+                      }}
+                      className="bg-blue-500 hover:bg-blue-600 text-white rounded-lg px-5 h-9 flex gap-2 font-medium"
+                    >
                       <Send className="w-4 h-4" /> Enviar
                     </Button>
                   </div>
