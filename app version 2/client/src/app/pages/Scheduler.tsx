@@ -24,10 +24,11 @@ import { format, setHours, setMinutes, parse } from "date-fns";
 import { es } from "date-fns/locale";
 import { toast } from "sonner";
 
+const today = new Date();
 const scheduledPostsInit = [
   {
     id: 1,
-    date: new Date(2026, 2, 20, 10, 0),
+    date: new Date(today.getFullYear(), today.getMonth(), today.getDate(), 10, 0),
     platform: "Instagram",
     icon: Instagram,
     color: "bg-pink-100 text-pink-700",
@@ -36,7 +37,7 @@ const scheduledPostsInit = [
   },
   {
     id: 2,
-    date: new Date(2026, 2, 20, 14, 30),
+    date: new Date(today.getFullYear(), today.getMonth(), today.getDate(), 14, 30),
     platform: "Twitter",
     icon: Twitter,
     color: "bg-blue-100 text-blue-700",
@@ -45,7 +46,7 @@ const scheduledPostsInit = [
   },
   {
     id: 3,
-    date: new Date(2026, 2, 21, 9, 0),
+    date: new Date(today.getFullYear(), today.getMonth(), today.getDate() + 1, 9, 0),
     platform: "Facebook",
     icon: Facebook,
     color: "bg-indigo-100 text-indigo-700",
@@ -54,7 +55,7 @@ const scheduledPostsInit = [
   },
   {
     id: 4,
-    date: new Date(2026, 2, 21, 16, 0),
+    date: new Date(today.getFullYear(), today.getMonth(), today.getDate() + 1, 16, 0),
     platform: "LinkedIn",
     icon: Linkedin,
     color: "bg-sky-100 text-sky-700",
@@ -63,7 +64,7 @@ const scheduledPostsInit = [
   },
   {
     id: 5,
-    date: new Date(2026, 2, 22, 11, 0),
+    date: new Date(today.getFullYear(), today.getMonth(), today.getDate() + 2, 11, 0),
     platform: "Instagram",
     icon: Instagram,
     color: "bg-pink-100 text-pink-700",
@@ -73,8 +74,31 @@ const scheduledPostsInit = [
 ];
 
 export function Scheduler() {
-  const [selectedDate, setSelectedDate] = useState<Date | undefined>(new Date(2026, 2, 20));
-  const [posts, setPosts] = useState(scheduledPostsInit);
+  const [selectedDate, setSelectedDate] = useState<Date | undefined>(new Date());
+  const [posts, setPosts] = useState<any[]>(() => {
+    const local = localStorage.getItem("scheduled_posts");
+    if (local) {
+      try {
+        const parsed = JSON.parse(local).map((p: any) => ({
+          ...p,
+          date: new Date(p.date),
+          icon: p.platform.toLowerCase() === "instagram" ? Instagram :
+                p.platform.toLowerCase() === "twitter" ? Twitter :
+                p.platform.toLowerCase() === "facebook" ? Facebook :
+                p.platform.toLowerCase() === "linkedin" ? Linkedin : Clock,
+          color: p.platform.toLowerCase() === "instagram" ? "bg-pink-100 text-pink-700" :
+                 p.platform.toLowerCase() === "twitter" ? "bg-blue-100 text-blue-700" :
+                 p.platform.toLowerCase() === "facebook" ? "bg-indigo-100 text-indigo-700" :
+                 p.platform.toLowerCase() === "linkedin" ? "bg-sky-100 text-sky-700" : "bg-gray-100 text-gray-700"
+        }));
+        return [...scheduledPostsInit, ...parsed];
+      } catch (e) {
+        console.error("Error parsing scheduled posts:", e);
+        return scheduledPostsInit;
+      }
+    }
+    return scheduledPostsInit;
+  });
   
   // Modal State
   const [editingPost, setEditingPost] = useState<any>(null);
@@ -94,8 +118,19 @@ export function Scheduler() {
     setDraftTime(format(post.date, "HH:mm"));
   };
 
-  const handleDeleteClick = (postId: number) => {
-    setPosts(posts.filter(p => p.id !== postId));
+  const handleDeleteClick = (postId: number | string) => {
+    const updated = posts.filter(p => p.id !== postId);
+    setPosts(updated);
+    
+    // Save updated local posts to localStorage
+    try {
+      const local = JSON.parse(localStorage.getItem("scheduled_posts") || "[]");
+      const updatedLocal = local.filter((p: any) => p.id !== postId);
+      localStorage.setItem("scheduled_posts", JSON.stringify(updatedLocal));
+    } catch (e) {
+      console.error(e);
+    }
+    
     toast.success("Publicación eliminada correctamente.");
   };
 
@@ -108,12 +143,27 @@ export function Scheduler() {
       
       const newDate = setMinutes(setHours(parsedDate, hours), minutes);
 
-      setPosts(posts.map(p => {
+      const updated = posts.map(p => {
         if (p.id === editingPost.id) {
           return { ...p, content: draftContent, date: newDate };
         }
         return p;
-      }));
+      });
+      setPosts(updated);
+
+      // Save updated local posts to localStorage
+      try {
+        const local = JSON.parse(localStorage.getItem("scheduled_posts") || "[]");
+        const updatedLocal = local.map((p: any) => {
+          if (p.id === editingPost.id) {
+            return { ...p, content: draftContent, date: newDate.toISOString() };
+          }
+          return p;
+        });
+        localStorage.setItem("scheduled_posts", JSON.stringify(updatedLocal));
+      } catch (e) {
+        console.error(e);
+      }
 
       toast.success("Post actualizado correctamente", {
         description: "Los cambios se han guardado con éxito.",

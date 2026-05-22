@@ -182,12 +182,36 @@ export function CreatePost() {
       toast.error("Selecciona fecha y hora para programar");
       return;
     }
-    toast.success("¡Post programado exitosamente para el calendario!");
-    setContent("");
-    setScheduleDate("");
-    setScheduleTime("");
-    setUploadedImage(null);
-    setPublicImageUrl("");
+
+    // Save post to localStorage
+    try {
+      const dateStr = `${scheduleDate}T${scheduleTime}`;
+      const dateObj = new Date(dateStr);
+
+      const newPosts = selectedPlatforms.map((platform) => {
+        const id = Date.now() + Math.random();
+        return {
+          id,
+          date: dateObj.toISOString(),
+          platform: platform.charAt(0).toUpperCase() + platform.slice(1),
+          content: content,
+          status: "scheduled"
+        };
+      });
+
+      const existingPosts = JSON.parse(localStorage.getItem("scheduled_posts") || "[]");
+      localStorage.setItem("scheduled_posts", JSON.stringify([...existingPosts, ...newPosts]));
+
+      toast.success("¡Post programado exitosamente para el calendario!");
+      setContent("");
+      setScheduleDate("");
+      setScheduleTime("");
+      setUploadedImage(null);
+      setPublicImageUrl("");
+    } catch (error) {
+      console.error("Error saving scheduled post:", error);
+      toast.error("Error al programar el post.");
+    }
   };
 
   return (
