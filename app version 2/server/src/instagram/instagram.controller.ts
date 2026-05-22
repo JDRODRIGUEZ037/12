@@ -114,4 +114,28 @@ export class InstagramController {
   async disconnect(@Body('userId') userId: string = 'default-user') {
     return await this.instagramService.disconnect(userId);
   }
+
+  @Get('webhook')
+  verifyWebhook(
+    @Query('hub.mode') mode: string,
+    @Query('hub.challenge') challenge: string,
+    @Query('hub.verify_token') verifyToken: string,
+    @Res() res: Response,
+  ) {
+    const verified = this.instagramService.verifyWebhook(mode, challenge, verifyToken);
+    if (verified) {
+      return res.status(HttpStatus.OK).send(challenge);
+    } else {
+      return res.status(HttpStatus.FORBIDDEN).send('Verification failed');
+    }
+  }
+
+  @Post('webhook')
+  async handleWebhook(
+    @Body() body: any,
+    @Res() res: Response,
+  ) {
+    await this.instagramService.handleWebhookPayload(body);
+    return res.status(HttpStatus.OK).send('EVENT_RECEIVED');
+  }
 }

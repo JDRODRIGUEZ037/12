@@ -661,5 +661,35 @@ export class InstagramService {
     this.logger.log(`Desvinculada la cuenta de Instagram para el usuario ${userId}. Filas eliminadas: ${deleted.count}`);
     return { success: true, count: deleted.count };
   }
+
+  verifyWebhook(mode: string, challenge: string, verifyToken: string): boolean {
+    const configuredToken = this.configService.get('META_WEBHOOK_VERIFY_TOKEN') || process.env.META_WEBHOOK_VERIFY_TOKEN || 'doceapp_secure_verification_token';
+    const verified = mode === 'subscribe' && verifyToken === configuredToken;
+    if (verified) {
+      this.logger.log(`Verificación de Webhook exitosa con token: ${verifyToken}`);
+      return true;
+    }
+    this.logger.warn(`Verificación de Webhook fallida. Token recibido: ${verifyToken}, Esperado: ${configuredToken}`);
+    return false;
+  }
+
+  async handleWebhookPayload(payload: any) {
+    this.logger.log(`Recibido evento Webhook de Meta: ${JSON.stringify(payload)}`);
+    
+    // Aligns with user_global best practices: log incoming event to audit trail
+    try {
+      await this.prisma.auditLog.create({
+        data: {
+          action: 'META_WEBHOOK_RECEIVED',
+          entity: 'InstagramWebhook',
+          entityId: payload.entry?.[0]?.id || 'unknown',
+          tenantId: 'default-tenant',
+          payload: payload,
+        }
+      });
+    } catch (err) {
+      this.logger.error('Error al registrar log de auditoría para Webhook', err);
+    }
+  }
 }
 
