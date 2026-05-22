@@ -295,7 +295,7 @@ export class InstagramService {
         params: {
           access_token: account.accessToken,
           platform: 'instagram',
-          fields: 'id,participants,updated_time,messages{message,from,timestamp}',
+          fields: 'id,participants,updated_time,messages{message,from,timestamp,created_time}',
           limit: 10,
         },
       });
@@ -305,16 +305,20 @@ export class InstagramService {
         conversationsList.push(...dmResponse.data.data.map(conv => {
           const messages = conv.messages?.data || [];
           const formattedMessages = messages.map((msg: any) => ({
-            from: msg.from?.id === account.platformUserId ? 'me' : 'them',
+            from: (msg.from?.id === account.platformUserId || msg.from?.username === account.accountName) ? 'me' : 'them',
             text: msg.message,
-            timestamp: msg.timestamp
+            timestamp: msg.created_time || msg.timestamp || conv.updated_time
           })).reverse(); // oldest to newest
+
+          const contact = conv.participants?.data?.find(
+            (p: any) => p.username !== account.accountName && p.id !== account.platformUserId
+          ) || conv.participants?.data?.[0] || {};
 
           return {
             id: conv.id,
-            username: conv.participants?.data?.[0]?.username || 'Usuario',
-            name: conv.participants?.data?.[0]?.name || conv.participants?.data?.[0]?.username || 'Anónimo',
-            profile_picture: null,
+            username: contact.username || 'Usuario',
+            name: contact.name || contact.username || 'Anónimo',
+            profile_picture: contact.profile_picture || null,
             last_message: conv.messages?.data?.[0]?.message || 'Mensaje directo',
             messages: formattedMessages.length > 0 ? formattedMessages : [
               { from: 'them', text: conv.messages?.data?.[0]?.message || 'Mensaje directo', timestamp: conv.updated_time }

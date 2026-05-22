@@ -48,12 +48,26 @@ export function Inbox() {
     }
   }, [activeTab, conversations]);
 
+  const getInitials = (name: string) => {
+    if (!name) return 'U';
+    const cleanName = name.replace(/[^\w\s]/gi, '').trim() || name.trim();
+    const parts = cleanName.split(/\s+/).filter(Boolean);
+    if (parts.length === 0 || !parts[0]) return 'U';
+    if (parts.length === 1) return parts[0].substring(0, 2).toUpperCase();
+    return (parts[0][0] + (parts[1]?.[0] || '')).toUpperCase().substring(0, 2);
+  };
+
   const formatDate = (isoString: string) => {
+    if (!isoString) return 'Hace un momento';
     const date = new Date(isoString);
+    if (isNaN(date.getTime())) return 'Hace un momento';
     const now = new Date();
     const diffMs = now.getTime() - date.getTime();
     const diffMins = Math.round(diffMs / 60000);
-    if (diffMins < 60) return `Hace ${diffMins} min`;
+    if (diffMins < 60) {
+      if (diffMins <= 0) return 'Hace un momento';
+      return `Hace ${diffMins} min`;
+    }
     const diffHours = Math.round(diffMins / 60);
     if (diffHours < 24) return `Hace ${diffHours} hora${diffHours > 1 ? 's' : ''}`;
     return date.toLocaleDateString();
@@ -136,7 +150,7 @@ export function Inbox() {
                       {conv.profile_picture ? (
                         <img src={conv.profile_picture} alt={conv.name} className="w-full h-full object-cover" />
                       ) : (
-                        conv.name.split(' ').map((n: string) => n[0]).join('').toUpperCase().substring(0, 2)
+                        getInitials(conv.name)
                       )}
                     </div>
                     <div className="flex-1 min-w-0">
@@ -177,7 +191,7 @@ export function Inbox() {
                     {selectedConv.profile_picture ? (
                       <img src={selectedConv.profile_picture} alt={selectedConv.name} className="w-full h-full object-cover" />
                     ) : (
-                      selectedConv.name.split(' ').map((n: string) => n[0]).join('').toUpperCase().substring(0, 2)
+                      getInitials(selectedConv.name)
                     )}
                   </div>
                   <div>
@@ -238,7 +252,7 @@ export function Inbox() {
                         <div key={idx} className="flex justify-start mb-6">
                           <div className="flex items-start gap-3 max-w-[70%]">
                             <div className="w-8 h-8 rounded-full bg-indigo-500 text-white text-xs flex items-center justify-center font-bold flex-shrink-0 mt-1 shadow-sm">
-                              {selectedConv.name.substring(0, 2).toUpperCase()}
+                              {getInitials(selectedConv.name)}
                             </div>
                             <div className="bg-white border border-gray-100 rounded-2xl rounded-tl-xs p-4 shadow-sm text-gray-800 text-[15px] relative">
                               <div className="font-semibold text-gray-700 mb-1 text-xs">
