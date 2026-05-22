@@ -3,7 +3,6 @@ import { Dashboard } from "./pages/Dashboard";
 import { Scheduler } from "./pages/Scheduler";
 import { CreatePost } from "./pages/CreatePost";
 import { Accounts } from "./pages/Accounts";
-import { Analytics } from "./pages/Analytics";
 import { AIInsights } from "./pages/AIInsights";
 import { PostDetails } from "./pages/PostDetails";
 import { Inbox } from "./pages/Inbox";
@@ -27,7 +26,6 @@ export const router = createBrowserRouter([
       { path: "drafts", Component: Drafts },
       { path: "inbox", Component: Inbox },
       { path: "accounts", Component: Accounts },
-      { path: "analytics", Component: Analytics },
       { path: "insights", Component: AIInsights },
       { path: "settings", Component: Settings },
       { path: "post/:id", Component: PostDetails },

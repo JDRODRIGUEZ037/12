@@ -1,4 +1,5 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
+import { useNavigate } from "react-router";
 import { API_BASE_URL } from "../config";
 import { Card } from "../components/ui/card";
 import { Button } from "../components/ui/button";
@@ -34,15 +35,28 @@ const platforms = [
 ];
 
 export function CreatePost() {
-  const [selectedPlatforms, setSelectedPlatforms] = useState<string[]>(["instagram"]);
-  const [content, setContent] = useState("");
-  const [scheduleDate, setScheduleDate] = useState("");
-  const [scheduleTime, setScheduleTime] = useState("");
+  const navigate = useNavigate();
+
+  const getDraftField = (field: string, defaultValue: any) => {
+    const saved = localStorage.getItem("current_post_draft");
+    if (saved) {
+      try {
+        const parsed = JSON.parse(saved);
+        if (parsed[field] !== undefined) return parsed[field];
+      } catch (e) {}
+    }
+    return defaultValue;
+  };
+
+  const [selectedPlatforms, setSelectedPlatforms] = useState<string[]>(() => getDraftField("selectedPlatforms", ["instagram"]));
+  const [content, setContent] = useState(() => getDraftField("content", ""));
+  const [scheduleDate, setScheduleDate] = useState(() => getDraftField("scheduleDate", ""));
+  const [scheduleTime, setScheduleTime] = useState(() => getDraftField("scheduleTime", ""));
   
   // Prompts split
-  const [imagePrompt, setImagePrompt] = useState("");
-  const [copyPrompt, setCopyPrompt] = useState("");
-  const [aiTone, setAiTone] = useState("profesional");
+  const [imagePrompt, setImagePrompt] = useState(() => getDraftField("imagePrompt", ""));
+  const [copyPrompt, setCopyPrompt] = useState(() => getDraftField("copyPrompt", ""));
+  const [aiTone, setAiTone] = useState(() => getDraftField("aiTone", "profesional"));
   
   // Loading indicators
   const [isGeneratingImage, setIsGeneratingImage] = useState(false);
@@ -50,8 +64,95 @@ export function CreatePost() {
   const [isPublishing, setIsPublishing] = useState(false);
 
   // Generative assets
-  const [uploadedImage, setUploadedImage] = useState<string | null>(null);
-  const [publicImageUrl, setPublicImageUrl] = useState(""); 
+  const [uploadedImage, setUploadedImage] = useState<string | null>(() => getDraftField("uploadedImage", null));
+  const [publicImageUrl, setPublicImageUrl] = useState(() => getDraftField("publicImageUrl", "")); 
+
+  // Autosave Draft
+  useEffect(() => {
+    const isAllDefault = 
+      content === "" &&
+      scheduleDate === "" &&
+      scheduleTime === "" &&
+      imagePrompt === "" &&
+      copyPrompt === "" &&
+      aiTone === "profesional" &&
+      uploadedImage === null &&
+      publicImageUrl === "" &&
+      selectedPlatforms.length === 1 && selectedPlatforms[0] === "instagram";
+
+    if (isAllDefault) {
+      localStorage.removeItem("current_post_draft");
+    } else {
+      const draft = {
+        selectedPlatforms,
+        content,
+        scheduleDate,
+        scheduleTime,
+        imagePrompt,
+        copyPrompt,
+        aiTone,
+        uploadedImage,
+        publicImageUrl
+      };
+      localStorage.setItem("current_post_draft", JSON.stringify(draft));
+    }
+  }, [
+    selectedPlatforms,
+    content,
+    scheduleDate,
+    scheduleTime,
+    imagePrompt,
+    copyPrompt,
+    aiTone,
+    uploadedImage,
+    publicImageUrl
+  ]);
+
+  const clearDraftState = () => {
+    setContent("");
+    setScheduleDate("");
+    setScheduleTime("");
+    setImagePrompt("");
+    setCopyPrompt("");
+    setAiTone("profesional");
+    setUploadedImage(null);
+    setPublicImageUrl("");
+    setSelectedPlatforms(["instagram"]);
+    localStorage.removeItem("current_post_draft");
+  };
+
+  const handleSaveDraft = () => {
+    if (!content.trim() && !imagePrompt.trim() && !copyPrompt.trim() && !uploadedImage) {
+      toast.error("El borrador está vacío. Escribe algo antes de guardarlo.");
+      return;
+    }
+
+    try {
+      const newDraft = {
+        id: Date.now() + Math.random(),
+        createdAt: new Date().toISOString(),
+        selectedPlatforms,
+        content,
+        scheduleDate,
+        scheduleTime,
+        imagePrompt,
+        copyPrompt,
+        aiTone,
+        uploadedImage,
+        publicImageUrl
+      };
+
+      const existingDrafts = JSON.parse(localStorage.getItem("saved_drafts") || "[]");
+      localStorage.setItem("saved_drafts", JSON.stringify([newDraft, ...existingDrafts]));
+
+      toast.success("¡Borrador guardado exitosamente!");
+      clearDraftState();
+      navigate("/app/drafts");
+    } catch (error) {
+      console.error("Error saving draft:", error);
+      toast.error("Error al guardar el borrador.");
+    }
+  };
 
   const togglePlatform = (platformId: string) => {
     setSelectedPlatforms(prev =>
@@ -156,11 +257,7 @@ export function CreatePost() {
         toast.error(`Error de Instagram: ${data.error}`, { id: "publish-toast" });
       } else {
         toast.success(`¡Post publicado exitosamente en tu cuenta!`, { id: "publish-toast" });
-        setContent("");
-        setPublicImageUrl("");
-        setUploadedImage(null);
-        setImagePrompt("");
-        setCopyPrompt("");
+        clearDraftState();
       }
     } catch (err) {
       toast.error("Error de conexión con el backend.", { id: "publish-toast" });
@@ -203,11 +300,7 @@ export function CreatePost() {
       localStorage.setItem("scheduled_posts", JSON.stringify([...existingPosts, ...newPosts]));
 
       toast.success("¡Post programado exitosamente para el calendario!");
-      setContent("");
-      setScheduleDate("");
-      setScheduleTime("");
-      setUploadedImage(null);
-      setPublicImageUrl("");
+      clearDraftState();
     } catch (error) {
       console.error("Error saving scheduled post:", error);
       toast.error("Error al programar el post.");
@@ -378,11 +471,11 @@ export function CreatePost() {
           </Card>
 
           {/* Botones de Acción */}
-          <div className="flex items-center gap-4">
+          <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
             <Button 
               onClick={handlePublishNow}
               disabled={isPublishing}
-              className="bg-blue-600 hover:bg-blue-700 text-white font-bold py-3 rounded-lg flex-1 shadow-sm transition-all flex items-center justify-center gap-2 cursor-pointer"
+              className="bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700 text-white font-bold py-3 rounded-lg shadow-sm transition-all flex items-center justify-center gap-2 cursor-pointer w-full"
             >
               {isPublishing ? (
                 <RefreshCw className="w-5 h-5 mr-2 animate-spin" />
@@ -394,10 +487,18 @@ export function CreatePost() {
             <Button 
               onClick={handleSchedule}
               variant="outline"
-              className="border-gray-300 hover:bg-gray-50 text-gray-700 font-bold py-3 rounded-lg flex-1 shadow-2xs cursor-pointer"
+              className="border-gray-300 hover:bg-gray-50 text-gray-700 font-bold py-3 rounded-lg shadow-2xs flex items-center justify-center gap-2 cursor-pointer w-full"
             >
               <Clock className="w-5 h-5 mr-2 text-gray-400" />
               Programar
+            </Button>
+            <Button 
+              onClick={handleSaveDraft}
+              variant="secondary"
+              className="bg-gray-100 hover:bg-gray-200 text-gray-800 font-bold py-3 rounded-lg shadow-2xs flex items-center justify-center gap-2 cursor-pointer w-full"
+            >
+              <Bookmark className="w-5 h-5 mr-2 text-gray-500" />
+              Guardar Borrador
             </Button>
           </div>
 

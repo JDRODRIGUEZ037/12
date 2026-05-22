@@ -3,7 +3,7 @@ import { Card } from "../components/ui/card";
 import { API_BASE_URL } from '../config';
 import { Button } from "../components/ui/button";
 import { 
-  MessageSquare, AtSign, Mail, Star, Archive, Trash2, Send, Heart, 
+  MessageSquare, MessageCircle, AtSign, Mail, Star, Archive, Trash2, Send, Heart, 
   Instagram, Twitter 
 } from "lucide-react";
 
@@ -79,30 +79,33 @@ export function Inbox() {
           
           {/* Tabs */}
           <div className="p-4 pt-5 pb-3 border-b border-gray-100">
-            <div className="flex bg-gray-100 p-1 rounded-xl">
+            <div className="flex bg-gray-100 p-1 rounded-xl gap-1">
               <button 
                 onClick={() => setActiveTab('todos')}
-                className={`flex-1 py-2 px-3 rounded-lg text-sm font-medium transition-all ${activeTab === 'todos' ? 'bg-white shadow-sm text-gray-900' : 'text-gray-500 hover:text-gray-700'}`}
+                className={`flex-1 py-2 px-2.5 rounded-lg text-xs font-semibold flex items-center justify-center transition-all ${activeTab === 'todos' ? 'bg-white shadow-sm text-gray-900' : 'text-gray-500 hover:text-gray-700'}`}
               >
                 Todos
               </button>
               <button 
-                onClick={() => setActiveTab('comments')}
-                className={`flex-1 py-1.5 px-3 rounded-lg flex justify-center items-center transition-all ${activeTab === 'comments' ? 'bg-white shadow-sm text-gray-900' : 'text-gray-500 hover:text-gray-700'}`}
+                onClick={() => setActiveTab('dms')}
+                className={`flex-1.5 py-2 px-2 rounded-lg flex justify-center items-center gap-1.5 transition-all ${activeTab === 'dms' ? 'bg-white shadow-sm text-gray-900' : 'text-gray-500 hover:text-gray-700'}`}
               >
-                <MessageSquare className="w-4 h-4" />
+                <MessageSquare className="w-3.5 h-3.5" />
+                <span className="text-xs font-semibold">Mensajes</span>
+              </button>
+              <button 
+                onClick={() => setActiveTab('comments')}
+                className={`flex-1.5 py-2 px-2 rounded-lg flex justify-center items-center gap-1.5 transition-all ${activeTab === 'comments' ? 'bg-white shadow-sm text-gray-900' : 'text-gray-500 hover:text-gray-700'}`}
+              >
+                <MessageCircle className="w-3.5 h-3.5" />
+                <span className="text-xs font-semibold">Comentarios</span>
               </button>
               <button 
                 onClick={() => setActiveTab('mentions')}
-                className={`flex-1 py-1.5 px-3 rounded-lg flex justify-center items-center transition-all ${activeTab === 'mentions' ? 'bg-white shadow-sm text-gray-900' : 'text-gray-500 hover:text-gray-700'}`}
+                className={`flex-1 py-2 px-2 rounded-lg flex justify-center items-center gap-1.5 transition-all ${activeTab === 'mentions' ? 'bg-white shadow-sm text-gray-900' : 'text-gray-500 hover:text-gray-700'}`}
               >
-                <AtSign className="w-4 h-4" />
-              </button>
-              <button 
-                onClick={() => setActiveTab('dms')}
-                className={`flex-1 py-1.5 px-3 rounded-lg flex justify-center items-center transition-all ${activeTab === 'dms' ? 'bg-white shadow-sm text-gray-900' : 'text-gray-500 hover:text-gray-700'}`}
-              >
-                <Mail className="w-4 h-4" />
+                <AtSign className="w-3.5 h-3.5" />
+                <span className="text-xs font-semibold">Menciones</span>
               </button>
             </div>
           </div>

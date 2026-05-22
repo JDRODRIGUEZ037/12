@@ -217,12 +217,10 @@ export class InstagramService {
         return response.data.data;
       }
       
-      // Fallback a comentarios simulados si la publicación real no tiene comentarios para no dejar vacío el frontend
-      return this.getMockComments();
+      return [];
     } catch (error) {
       this.logger.error(`Error fetching comments for post ${postId}`, error.response?.data || error);
-      // Fallback a comentarios simulados si falla por permisos (ej. no tiene el scope instagram_manage_comments habilitado)
-      return this.getMockComments();
+      return [];
     }
   }
 
@@ -268,7 +266,7 @@ export class InstagramService {
     });
 
     if (!account) {
-      return this.getMockConversations();
+      return [];
     }
 
     const conversationsList: any[] = [];
@@ -333,41 +331,7 @@ export class InstagramService {
       this.logger.warn(`Direct Messages no disponibles en Graph API (${errorDetail}), se proveerá el fallback de DMs enriquecidos.`);
     }
 
-    // Si no obtuvimos DMs reales, agregamos unos de prueba (mock DMs) para garantizar que el flujo de DMs esté disponible
-    if (dmCount === 0) {
-      conversationsList.push(
-        {
-          id: 'mock-dm-1',
-          username: 'sofia_beauty',
-          name: 'Sofía Beauty',
-          profile_picture: null,
-          last_message: 'Hola! Me interesa agendar una cita para maquillaje de novia 👰✨. ¿Tienen disponibilidad?',
-          messages: [
-            { from: 'them', text: 'Hola! Me interesa agendar una cita para maquillaje de novia 👰✨. ¿Tienen disponibilidad?', timestamp: new Date(Date.now() - 300000).toISOString() },
-          ],
-          timestamp: new Date(Date.now() - 300000).toISOString(),
-          unseen_count: 1,
-          platform: 'instagram',
-          type: 'dm'
-        },
-        {
-          id: 'mock-dm-2',
-          username: 'carlos_style',
-          name: 'Carlos Estilo',
-          profile_picture: null,
-          last_message: '¿Tienen información sobre los precios de las asesorías de imagen?',
-          messages: [
-            { from: 'them', text: 'Hola, ¿cómo están?', timestamp: new Date(Date.now() - 4000000).toISOString() },
-            { from: 'me', text: '¡Hola Carlos! Muy bien, gracias. ¿En qué podemos ayudarte?', timestamp: new Date(Date.now() - 3800000).toISOString() },
-            { from: 'them', text: '¿Tienen información sobre los precios de las asesorías de imagen?', timestamp: new Date(Date.now() - 3600000).toISOString() }
-          ],
-          timestamp: new Date(Date.now() - 3600000).toISOString(),
-          unseen_count: 0,
-          platform: 'instagram',
-          type: 'dm'
-        }
-      );
-    }
+    // Si no obtuvimos DMs reales, no agregamos de prueba (eliminado por requerimiento del cliente)
 
     // 2. Obtener COMENTARIOS de posts recientes
     try {
@@ -419,60 +383,8 @@ export class InstagramService {
       );
     }
 
-    // Fallback final a mocks si no hay absolutamente nada
-    return this.getMockConversations();
-  }
-
-  private getMockConversations() {
-    return [
-      { 
-        id: 'mock-conv-1', 
-        username: 'maria_g', 
-        name: 'María González', 
-        last_message: '¡Me encanta este producto! ¿Dónde puedo comprarlo?', 
-        messages: [
-          { from: 'them', text: '¡Me encanta este producto! ¿Dónde puedo comprarlo?', timestamp: new Date(Date.now() - 300000).toISOString() }
-        ],
-        timestamp: new Date(Date.now() - 300000).toISOString(), 
-        unseen_count: 1,
-        platform: 'instagram',
-        type: 'dm'
-      },
-      { 
-        id: 'mock-conv-2', 
-        username: 'ana_m', 
-        name: 'Ana Martínez', 
-        last_message: 'Hola, quisiera información sobre sus horarios de atención.', 
-        messages: [
-          { from: 'them', text: 'Hola, quisiera información sobre sus horarios de atención.', timestamp: new Date(Date.now() - 3600000).toISOString() }
-        ],
-        timestamp: new Date(Date.now() - 3600000).toISOString(), 
-        unseen_count: 0,
-        platform: 'instagram',
-        type: 'dm'
-      },
-      { 
-        id: 'mock-conv-3', 
-        username: 'luis_h', 
-        name: 'Luis Hernández', 
-        last_message: 'Interesante artículo, me gustaría saber más sobre este tema.', 
-        messages: [
-          { from: 'them', text: 'Interesante artículo, me gustaría saber más sobre este tema.', timestamp: new Date(Date.now() - 7200000).toISOString() }
-        ],
-        timestamp: new Date(Date.now() - 7200000).toISOString(), 
-        unseen_count: 0,
-        platform: 'instagram',
-        type: 'comment',
-        post_caption: 'Nueva colección primavera-verano 2026 🌸'
-      }
-    ];
-  }
-
-  private getMockComments() {
-    return [
-      { id: 'mock-1', username: 'maria_g', text: '¡Me encanta! Definitivamente iré 😍', timestamp: new Date().toISOString(), like_count: 12 },
-      { id: 'mock-2', username: 'carlos_rod', text: 'Excelente iniciativa, muy profesional 👏', timestamp: new Date(Date.now() - 3600000).toISOString(), like_count: 5 },
-    ];
+    // Fallback final si no hay absolutamente nada
+    return [];
   }
 
   async getAIInsights(userId: string = 'default-user') {

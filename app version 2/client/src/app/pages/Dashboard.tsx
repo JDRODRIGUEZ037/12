@@ -3,6 +3,7 @@ import { Link } from "react-router";
 import { API_BASE_URL } from '../config';
 import { 
   TrendingUp, 
+  TrendingDown,
   Users, 
   MessageCircle, 
   Heart,
@@ -10,7 +11,9 @@ import {
   Twitter,
   Facebook,
   Linkedin,
-  LayoutGrid
+  LayoutGrid,
+  Share2,
+  Eye
 } from "lucide-react";
 import { 
   LineChart, 
@@ -24,7 +27,14 @@ import {
   ResponsiveContainer,
   PieChart,
   Pie,
-  Cell
+  Cell,
+  AreaChart,
+  Area,
+  RadarChart,
+  PolarGrid,
+  PolarAngleAxis,
+  PolarRadiusAxis,
+  Radar
 } from "recharts";
 
 const statsData = [
@@ -44,45 +54,40 @@ const engagementData = [
   { name: "Dom", engagement: 7800 },
 ];
 
-  // Se reemplaza platformData estática por una dinámica calculada dentro del componente
+const followerGrowth = [
+  { month: "Ene", followers: 42000 },
+  { month: "Feb", followers: 43500 },
+  { month: "Mar", followers: 45200 },
+  { month: "Abr", followers: 44800 },
+  { month: "May", followers: 46500 },
+  { month: "Jun", followers: 47321 },
+];
 
-const recentPosts = [
-  { 
-    id: 1, 
-    platform: "Instagram", 
-    icon: Instagram, 
-    content: "Lanzamiento de nueva campaña de verano 🌞", 
-    likes: 1234, 
-    comments: 89,
-    time: "Hace 2 horas"
-  },
-  { 
-    id: 2, 
-    platform: "Twitter", 
-    icon: Twitter, 
-    content: "Tips para mejorar tu estrategia de contenido", 
-    likes: 567, 
-    comments: 34,
-    time: "Hace 5 horas"
-  },
-  { 
-    id: 3, 
-    platform: "Facebook", 
-    icon: Facebook, 
-    content: "Evento especial este fin de semana 🎉", 
-    likes: 892, 
-    comments: 45,
-    time: "Hace 1 día"
-  },
-  { 
-    id: 4, 
-    platform: "LinkedIn", 
-    icon: Linkedin, 
-    content: "Casos de éxito en marketing digital", 
-    likes: 234, 
-    comments: 12,
-    time: "Hace 1 día"
-  },
+const engagementByPlatform = [
+  { platform: "Instagram", likes: 8500, comments: 1200, shares: 450 },
+  { platform: "Twitter", likes: 5200, comments: 890, shares: 320 },
+  { platform: "Facebook", likes: 6800, comments: 1100, shares: 560 },
+  { platform: "LinkedIn", likes: 3400, comments: 450, shares: 280 },
+];
+
+const contentPerformance = [
+  { type: "Videos", engagement: 85 },
+  { type: "Imágenes", engagement: 72 },
+  { type: "Carruseles", engagement: 68 },
+  { type: "Texto", engagement: 45 },
+  { type: "Stories", engagement: 78 },
+  { type: "Reels", engagement: 92 },
+];
+
+const hourlyActivity = [
+  { hour: "00:00", activity: 120 },
+  { hour: "03:00", activity: 80 },
+  { hour: "06:00", activity: 150 },
+  { hour: "09:00", activity: 450 },
+  { hour: "12:00", activity: 680 },
+  { hour: "15:00", activity: 720 },
+  { hour: "18:00", activity: 890 },
+  { hour: "21:00", activity: 650 },
 ];
 
 import { useState, useEffect } from "react";
@@ -323,8 +328,121 @@ export function Dashboard() {
         </Card>
       </div>
 
+      {/* Sección Unificada de Analíticas Robustas */}
+      <div className="mb-6">
+        <h2 className="text-xl font-bold text-gray-900">Analíticas de Rendimiento</h2>
+        <p className="text-gray-500 text-sm mt-0.5">Métricas avanzadas consolidadas de audiencia y engagement</p>
+      </div>
+
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-8">
+        {/* Follower Growth */}
+        <Card className="p-6 border-gray-200/60 shadow-sm bg-white">
+          <h2 className="text-lg font-semibold text-gray-900 mb-4">Crecimiento de Seguidores</h2>
+          <ResponsiveContainer width="100%" height={300}>
+            <AreaChart data={followerGrowth}>
+              <defs>
+                <linearGradient id="colorFollowers" x1="0" y1="0" x2="0" y2="1">
+                  <stop offset="5%" stopColor="#3b82f6" stopOpacity={0.3}/>
+                  <stop offset="95%" stopColor="#3b82f6" stopOpacity={0}/>
+                </linearGradient>
+              </defs>
+              <CartesianGrid strokeDasharray="3 3" stroke="#e5e7eb" />
+              <XAxis dataKey="month" stroke="#6b7280" />
+              <YAxis stroke="#6b7280" />
+              <Tooltip 
+                contentStyle={{ backgroundColor: 'white', border: '1px solid #e5e7eb', borderRadius: '8px' }}
+              />
+              <Area 
+                type="monotone" 
+                dataKey="followers" 
+                stroke="#3b82f6" 
+                strokeWidth={2}
+                fillOpacity={1} 
+                fill="url(#colorFollowers)" 
+              />
+            </AreaChart>
+          </ResponsiveContainer>
+        </Card>
+
+        {/* Engagement por Plataforma */}
+        <Card className="p-6 border-gray-200/60 shadow-sm bg-white">
+          <h2 className="text-lg font-semibold text-gray-900 mb-4">Engagement por Plataforma</h2>
+          <ResponsiveContainer width="100%" height={300}>
+            <BarChart data={engagementByPlatform}>
+              <CartesianGrid strokeDasharray="3 3" stroke="#e5e7eb" />
+              <XAxis dataKey="platform" stroke="#6b7280" />
+              <YAxis stroke="#6b7280" />
+              <Tooltip 
+                contentStyle={{ backgroundColor: 'white', border: '1px solid #e5e7eb', borderRadius: '8px' }}
+              />
+              <Bar dataKey="likes" fill="#ec4899" radius={[4, 4, 0, 0]} />
+              <Bar dataKey="comments" fill="#3b82f6" radius={[4, 4, 0, 0]} />
+              <Bar dataKey="shares" fill="#10b981" radius={[4, 4, 0, 0]} />
+            </BarChart>
+          </ResponsiveContainer>
+          <div className="flex items-center justify-center gap-6 mt-4">
+            <div className="flex items-center gap-2">
+              <div className="w-3 h-3 rounded-full bg-pink-500" />
+              <span className="text-xs text-gray-600 font-semibold">Likes</span>
+            </div>
+            <div className="flex items-center gap-2">
+              <div className="w-3 h-3 rounded-full bg-blue-500" />
+              <span className="text-xs text-gray-600 font-semibold">Comentarios</span>
+            </div>
+            <div className="flex items-center gap-2">
+              <div className="w-3 h-3 rounded-full bg-green-500" />
+              <span className="text-xs text-gray-600 font-semibold">Compartidos</span>
+            </div>
+          </div>
+        </Card>
+      </div>
+
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-8">
+        {/* Content Performance Radar */}
+        <Card className="p-6 border-gray-200/60 shadow-sm bg-white">
+          <h2 className="text-lg font-semibold text-gray-900 mb-4">Rendimiento por Tipo de Contenido</h2>
+          <ResponsiveContainer width="100%" height={300}>
+            <RadarChart data={contentPerformance}>
+              <PolarGrid stroke="#e5e7eb" />
+              <PolarAngleAxis dataKey="type" stroke="#6b7280" />
+              <PolarRadiusAxis stroke="#6b7280" />
+              <Radar 
+                name="Engagement" 
+                dataKey="engagement" 
+                stroke="#8b5cf6" 
+                fill="#8b5cf6" 
+                fillOpacity={0.6} 
+              />
+              <Tooltip />
+            </RadarChart>
+          </ResponsiveContainer>
+        </Card>
+
+        {/* Hourly Activity */}
+        <Card className="p-6 border-gray-200/60 shadow-sm bg-white">
+          <h2 className="text-lg font-semibold text-gray-900 mb-4">Actividad por Hora</h2>
+          <ResponsiveContainer width="100%" height={300}>
+            <LineChart data={hourlyActivity}>
+              <CartesianGrid strokeDasharray="3 3" stroke="#e5e7eb" />
+              <XAxis dataKey="hour" stroke="#6b7280" />
+              <YAxis stroke="#6b7280" />
+              <Tooltip 
+                contentStyle={{ backgroundColor: 'white', border: '1px solid #e5e7eb', borderRadius: '8px' }}
+              />
+              <Line 
+                type="monotone" 
+                dataKey="activity" 
+                stroke="#f59e0b" 
+                strokeWidth={3}
+                dot={{ fill: '#f59e0b', r: 4 }}
+              />
+            </LineChart>
+          </ResponsiveContainer>
+        </Card>
+      </div>
+
       {/* Recent Posts */}
-      <Card className="p-6 shadow-sm border-gray-200/60">
+      <Card className="p-6 shadow-sm border-gray-200/60 bg-white">
         <h2 className="text-lg font-semibold text-gray-900 mb-4">Posts Recientes</h2>
         <div className="space-y-4">
           {isLoadingPosts ? (
@@ -333,7 +451,7 @@ export function Dashboard() {
             <div className="text-center py-6 text-gray-500">No hay posts todavía o no has conectado tu cuenta.</div>
           ) : (
             realPosts.map((post) => (
-              <Link key={post.id} to={`/post/${post.id}`} className="block">
+              <Link key={post.id} to={`/app/post/${post.id}`} className="block">
                 <div className="flex items-start gap-4 p-4 rounded-lg hover:bg-gray-50 transition-colors border border-transparent hover:border-gray-200 cursor-pointer">
                   <div className="p-2 bg-gradient-to-tr from-yellow-400 via-red-500 to-purple-600 rounded-lg">
                     {post.thumbnail_url || post.media_url ? (

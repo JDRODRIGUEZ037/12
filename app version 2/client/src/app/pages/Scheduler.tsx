@@ -23,6 +23,7 @@ import {
 import { format, setHours, setMinutes, parse } from "date-fns";
 import { es } from "date-fns/locale";
 import { toast } from "sonner";
+import { useNavigate } from "react-router";
 
 const today = new Date();
 const scheduledPostsInit = [
@@ -74,6 +75,7 @@ const scheduledPostsInit = [
 ];
 
 export function Scheduler() {
+  const navigate = useNavigate();
   const [selectedDate, setSelectedDate] = useState<Date | undefined>(new Date());
   const [posts, setPosts] = useState<any[]>(() => {
     const local = localStorage.getItem("scheduled_posts");
@@ -181,7 +183,7 @@ export function Scheduler() {
           <h1 className="text-3xl font-bold text-gray-900">Programador de Posts</h1>
           <p className="text-gray-600 mt-1">Gestiona y programa tus publicaciones</p>
         </div>
-        <Button className="bg-blue-600 hover:bg-blue-700 text-white">
+        <Button onClick={() => navigate("/app/create")} className="bg-blue-600 hover:bg-blue-700 text-white cursor-pointer">
           <Clock className="w-4 h-4 mr-2" />
           Nueva Programación
         </Button>
@@ -250,7 +252,7 @@ export function Scheduler() {
             <div className="text-center py-12">
               <Clock className="w-12 h-12 text-gray-400 mx-auto mb-3" />
               <p className="text-gray-600">No hay posts programados para esta fecha</p>
-              <Button variant="outline" className="mt-4">
+              <Button onClick={() => navigate("/app/create")} variant="outline" className="mt-4 cursor-pointer">
                 Programar Post
               </Button>
             </div>

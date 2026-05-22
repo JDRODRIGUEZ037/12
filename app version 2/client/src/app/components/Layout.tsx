@@ -4,8 +4,6 @@ import {
   Calendar, 
   PlusCircle, 
   Users, 
-  BarChart3,
-  Share2,
   FileText,
   MessageSquare,
   Sparkles
@@ -28,7 +26,6 @@ export function Layout() {
     { path: "/app/drafts", icon: FileText, label: "Borradores" },
     { path: "/app/inbox", icon: MessageSquare, label: "Mensajes" },
     { path: "/app/accounts", icon: Users, label: "Cuentas" },
-    { path: "/app/analytics", icon: BarChart3, label: "Analíticas" },
     { path: "/app/insights", icon: Sparkles, label: "AI Insights" },
   ];
 
@@ -37,9 +34,13 @@ export function Layout() {
       {/* Sidebar */}
       <aside className="w-64 bg-white border-r border-gray-200 flex flex-col">
         <div className="p-6 border-b border-gray-200">
-          <div className="flex items-center gap-2">
-            <Share2 className="w-8 h-8 text-blue-600" />
-            <h1 className="text-xl font-bold text-gray-900">SocialHub</h1>
+          <div className="flex items-center leading-none select-none">
+            <span className="text-2xl font-black tracking-tight bg-gradient-to-r from-gray-900 via-gray-800 to-blue-600 bg-clip-text text-transparent uppercase font-sans">
+              DOCE
+            </span>
+            <span className="ml-1.5 px-1.5 py-0.5 text-[10px] font-bold bg-gradient-to-r from-blue-600 to-purple-600 text-white rounded-md tracking-wider uppercase">
+              APP
+            </span>
           </div>
         </div>
         
