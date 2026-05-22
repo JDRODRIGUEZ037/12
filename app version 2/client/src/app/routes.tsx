@@ -31,4 +31,6 @@ export const router = createBrowserRouter([
       { path: "post/:id", Component: PostDetails },
     ],
   },
-]);
+], {
+  basename: import.meta.env.BASE_URL || "/",
+});
