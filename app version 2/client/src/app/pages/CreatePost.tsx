@@ -36,6 +36,18 @@ const platforms = [
 
 export function CreatePost() {
   const navigate = useNavigate();
+  const [account, setAccount] = useState<any>(null);
+
+  useEffect(() => {
+    fetch(`${API_BASE_URL}/instagram/accounts`)
+      .then(res => res.json())
+      .then(data => {
+        if (Array.isArray(data) && data.length > 0) {
+          setAccount(data[0]);
+        }
+      })
+      .catch(err => console.error("Error fetching accounts for preview:", err));
+  }, []);
 
   const getDraftField = (field: string, defaultValue: any) => {
     const saved = localStorage.getItem("current_post_draft");
@@ -548,13 +560,23 @@ export function CreatePost() {
               <div className="flex items-center gap-3 p-3 border-b border-gray-100">
                 <div className="w-9 h-9 rounded-full bg-gradient-to-tr from-yellow-500 via-pink-500 to-purple-600 p-0.5">
                   <div className="w-full h-full rounded-full bg-white p-0.5">
-                    <div className="w-full h-full rounded-full bg-gray-200 overflow-hidden flex items-center justify-center text-[10px] font-bold text-gray-700">
-                      JD
-                    </div>
+                    {account?.profilePicture ? (
+                      <img 
+                        src={account.profilePicture} 
+                        alt={account.accountName} 
+                        className="w-full h-full rounded-full object-cover" 
+                      />
+                    ) : (
+                      <div className="w-full h-full rounded-full bg-gray-200 overflow-hidden flex items-center justify-center text-[10px] font-bold text-gray-700">
+                        {account?.accountName ? account.accountName.substring(0, 2).toUpperCase() : "JD"}
+                      </div>
+                    )}
                   </div>
                 </div>
                 <div>
-                  <p className="text-xs font-bold text-gray-900">Usuario Demo</p>
+                  <p className="text-xs font-bold text-gray-900">
+                    {account?.accountName ? `@${account.accountName}` : "Usuario Conectado"}
+                  </p>
                   <p className="text-[10px] text-gray-500">Instagram Profesional</p>
                 </div>
               </div>
@@ -601,7 +623,7 @@ export function CreatePost() {
                 </p>
                 {content ? (
                   <p className="text-xs text-gray-800 leading-relaxed whitespace-pre-wrap">
-                    <span className="font-bold text-gray-900 mr-1.5">demo_account</span>
+                    <span className="font-bold text-gray-900 mr-1.5">{account?.accountName ? account.accountName : "demo_account"}</span>
                     {content}
                   </p>
                 ) : (

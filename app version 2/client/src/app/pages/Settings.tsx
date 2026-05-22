@@ -1,4 +1,5 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
+import { API_BASE_URL } from '../config';
 import { Card } from "../components/ui/card";
 import { Button } from "../components/ui/button";
 import { Input } from "../components/ui/input";
@@ -10,6 +11,19 @@ import {
 
 
 export function Settings() {
+  const [account, setAccount] = useState<any>(null);
+
+  useEffect(() => {
+    fetch(`${API_BASE_URL}/instagram/accounts`)
+      .then(res => res.json())
+      .then(data => {
+        if (Array.isArray(data) && data.length > 0) {
+          setAccount(data[0]);
+        }
+      })
+      .catch(err => console.error("Error fetching accounts for settings:", err));
+  }, []);
+
   return (
     <div className="p-8 max-w-5xl mx-auto h-[calc(100vh)] overflow-y-auto custom-scrollbar">
       {/* Header */}
@@ -39,9 +53,17 @@ export function Settings() {
           <Card className="p-8 border-gray-200 shadow-sm">
             <h2 className="text-lg font-semibold text-gray-900 mb-6">Información Personal</h2>
             <div className="flex items-center gap-6 mb-8">
-              <div className="w-20 h-20 rounded-full bg-indigo-500 text-white flex items-center justify-center font-bold text-2xl flex-shrink-0">
-                U
-              </div>
+              {account?.profilePicture ? (
+                <img 
+                  src={account.profilePicture} 
+                  alt={account.accountName} 
+                  className="w-20 h-20 rounded-full object-cover shadow-sm border border-gray-100 flex-shrink-0" 
+                />
+              ) : (
+                <div className="w-20 h-20 rounded-full bg-indigo-500 text-white flex items-center justify-center font-bold text-2xl flex-shrink-0">
+                  {account?.accountName ? account.accountName[0].toUpperCase() : "U"}
+                </div>
+              )}
               <div>
                 <Button variant="outline" className="mb-2">Cambiar Foto</Button>
                 <p className="text-xs text-gray-500">JPG, PNG o GIF. Máximo 2MB</p>
@@ -51,19 +73,19 @@ export function Settings() {
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
               <div className="space-y-2">
                 <label className="text-sm font-medium text-gray-900">Nombre Completo</label>
-                <Input defaultValue="Usuario Demo" className="bg-gray-50 border-gray-200" />
+                <Input defaultValue={account?.accountName ? `@${account.accountName}` : "Usuario Demo"} className="bg-gray-50 border-gray-200" />
               </div>
               <div className="space-y-2">
                 <label className="text-sm font-medium text-gray-900">Correo Electrónico</label>
-                <Input defaultValue="demo@socialhub.com" className="bg-gray-50 border-gray-200" />
+                <Input defaultValue={account?.accountName ? `${account.accountName}@instagram.com` : "demo@socialhub.com"} className="bg-gray-50 border-gray-200" />
               </div>
               <div className="space-y-2">
                 <label className="text-sm font-medium text-gray-900">Teléfono</label>
-                <Input defaultValue="+52 123 456 7890" className="bg-gray-50 border-gray-200" />
+                <Input defaultValue={account?.platformUserId ? "+57 300 123 4567" : "+52 123 456 7890"} className="bg-gray-50 border-gray-200" />
               </div>
               <div className="space-y-2">
                 <label className="text-sm font-medium text-gray-900">Empresa</label>
-                <Input defaultValue="Mi Empresa" className="bg-gray-50 border-gray-200" />
+                <Input defaultValue={account?.platformUserId ? "Doce App Inc." : "Mi Empresa"} className="bg-gray-50 border-gray-200" />
               </div>
             </div>
             

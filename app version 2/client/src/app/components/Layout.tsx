@@ -1,4 +1,6 @@
 import { Outlet, Link, useLocation } from "react-router";
+import { useState, useEffect } from "react";
+import { API_BASE_URL } from "../config";
 import { 
   LayoutDashboard, 
   Calendar, 
@@ -18,6 +20,18 @@ import {
 
 export function Layout() {
   const location = useLocation();
+  const [account, setAccount] = useState<any>(null);
+
+  useEffect(() => {
+    fetch(`${API_BASE_URL}/instagram/accounts`)
+      .then(res => res.json())
+      .then(data => {
+        if (Array.isArray(data) && data.length > 0) {
+          setAccount(data[0]);
+        }
+      })
+      .catch(err => console.error("Error fetching accounts for layout:", err));
+  }, []);
   
   const navItems = [
     { path: "/app", icon: LayoutDashboard, label: "Dashboard" },
@@ -71,12 +85,24 @@ export function Layout() {
           <DropdownMenu>
             <DropdownMenuTrigger asChild>
               <div className="flex items-center gap-3 px-4 py-3 rounded-lg hover:bg-gray-100 transition-colors cursor-pointer w-full">
-                <div className="w-10 h-10 rounded-full bg-gradient-to-br from-blue-500 to-purple-500 flex items-center justify-center text-white font-semibold">
-                  U
-                </div>
-                <div className="text-left flex-1">
-                  <p className="text-sm font-medium text-gray-900">Usuario Demo</p>
-                  <p className="text-xs text-gray-500">demo@socialhub.com</p>
+                {account?.profilePicture ? (
+                  <img 
+                    src={account.profilePicture} 
+                    alt={account.accountName} 
+                    className="w-10 h-10 rounded-full object-cover shadow-sm border border-gray-100" 
+                  />
+                ) : (
+                  <div className="w-10 h-10 rounded-full bg-gradient-to-br from-blue-500 to-purple-500 flex items-center justify-center text-white font-semibold shadow-sm">
+                    {account?.accountName ? account.accountName[0].toUpperCase() : "U"}
+                  </div>
+                )}
+                <div className="text-left flex-1 min-w-0">
+                  <p className="text-sm font-semibold text-gray-900 truncate">
+                    {account?.accountName ? `@${account.accountName}` : "Usuario Conectado"}
+                  </p>
+                  <p className="text-xs text-gray-500 truncate">
+                    {account?.followersCount !== undefined ? `${account.followersCount} seguidores` : "Sin cuenta vinculada"}
+                  </p>
                 </div>
               </div>
             </DropdownMenuTrigger>
