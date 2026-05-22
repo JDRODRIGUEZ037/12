@@ -186,6 +186,7 @@ const LandingPage = () => {
         </div>
       </nav>
 
+      <main>
       {/* Hero Section */}
       <section className="relative pt-36 pb-20 px-6 overflow-hidden">
         <div className="max-w-7xl mx-auto grid lg:grid-cols-[1.1fr_1fr] gap-12 lg:gap-16 items-center">
@@ -193,8 +194,8 @@ const LandingPage = () => {
           {/* Hero Left Content */}
           <div className="space-y-8 text-center lg:text-left max-w-2xl mx-auto lg:mx-0">
             <div className="space-y-4">
-              <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-blue-500/10 border border-blue-500/20 text-blue-400 text-xs font-bold uppercase tracking-wider animate-pulse">
-                <Sparkles className="w-3.5 h-3.5 text-blue-400 fill-blue-400/20" />
+              <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-blue-500/10 border border-blue-500/20 text-blue-300 text-xs font-bold uppercase tracking-wider animate-pulse">
+                <Sparkles className="w-3.5 h-3.5 text-blue-300 fill-blue-400/20" />
                 {t.badgeText}
               </div>
               <h1 className="text-4xl sm:text-5xl lg:text-6xl font-black text-white leading-[1.08] tracking-tight">
@@ -263,7 +264,7 @@ const LandingPage = () => {
                       <p className="text-[9px] text-slate-400 uppercase tracking-widest font-bold mb-0.5">{stat.label}</p>
                       <span className="text-base sm:text-lg font-black text-white">{stat.val}</span>
                     </div>
-                    <div className="flex items-center justify-between mt-1 text-[9px] text-[#717182] font-semibold">
+                    <div className="flex items-center justify-between mt-1 text-[9px] text-[#A0A0B0] font-semibold">
                       <span className={stat.color}>{stat.desc}</span>
                       <span className="text-green-500 font-bold">{stat.trend}</span>
                     </div>
@@ -359,7 +360,7 @@ const LandingPage = () => {
                     <Calendar className="w-4 h-4 text-blue-400" />
                   </div>
                   <div>
-                    <h4 className="text-xs font-bold text-slate-200">{language === 'es' ? 'Próxima publicación automatizada' : 'Next scheduled post'}</h4>
+                    <p className="text-xs font-bold text-slate-200">{language === 'es' ? 'Próxima publicación automatizada' : 'Next scheduled post'}</p>
                     <p className="text-[10px] text-slate-400 font-semibold">{language === 'es' ? 'Reel de Instagram optimizado con IA' : 'AI optimized Instagram Reel'}</p>
                   </div>
                 </div>
@@ -383,7 +384,7 @@ const LandingPage = () => {
           
           {/* Title & Badge */}
           <div className="text-center max-w-3xl mx-auto mb-16 space-y-4">
-            <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-indigo-500/10 border border-indigo-500/20 text-indigo-400 text-xs font-bold uppercase tracking-widest">
+            <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-indigo-500/10 border border-indigo-500/20 text-indigo-300 text-xs font-bold uppercase tracking-widest">
               {language === 'es' ? 'Cómo Funciona' : 'How It Works'}
             </div>
             <h2 className="text-3xl sm:text-4xl lg:text-5xl font-black text-white tracking-tight leading-none">
@@ -527,7 +528,7 @@ const LandingPage = () => {
                         ].map((item, idx) => (
                           <div key={idx} className={`p-3 rounded-xl border ${item.active ? 'bg-indigo-600/10 border-indigo-500/25' : 'bg-white/2 border-white/5 opacity-55'}`}>
                             <span className="text-[10px] text-slate-400 font-bold font-mono block mb-1">{item.day}</span>
-                            <h4 className="text-xs font-bold text-white tracking-tight">{item.task}</h4>
+                            <p className="text-xs font-bold text-white tracking-tight">{item.task}</p>
                             <p className="text-[9px] text-slate-400 mt-2 font-mono">{item.time}</p>
                             <span className={`inline-block text-[8px] font-extrabold uppercase px-1.5 py-0.5 rounded mt-1.5 ${item.status === 'Publicado' ? 'bg-green-500/10 text-green-400' : item.status === 'Borrador' ? 'bg-amber-500/10 text-amber-400' : 'bg-indigo-500/10 text-indigo-400'}`}>
                               {item.status}
@@ -599,7 +600,7 @@ const LandingPage = () => {
                     >
                       <div className="space-y-1 border-b border-white/5 pb-2 shrink-0">
                         <span className="text-[9px] text-purple-400 uppercase font-bold tracking-widest block">AI Copilot</span>
-                        <h4 className="text-xs font-bold text-white">Generar sugerencia de copia persuasiva</h4>
+                        <p className="text-xs font-bold text-white">Generar sugerencia de copia persuasiva</p>
                       </div>
                       
                       <div className="bg-white/2 border border-white/5 rounded-xl p-3.5 text-xs text-slate-300 italic font-semibold leading-relaxed">
@@ -634,7 +635,7 @@ const LandingPage = () => {
         <div className="max-w-6xl mx-auto">
           
           <div className="text-center max-w-2xl mx-auto mb-16 space-y-4">
-            <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-cyan-500/10 border border-cyan-500/20 text-cyan-400 text-xs font-bold uppercase tracking-wider">
+            <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-cyan-500/10 border border-cyan-500/20 text-cyan-300 text-xs font-bold uppercase tracking-wider">
               {language === 'es' ? 'Conectividad Segura' : 'Secure Connection'}
             </div>
             <h2 className="text-3xl sm:text-4xl font-black text-white tracking-tight">
@@ -703,7 +704,7 @@ const LandingPage = () => {
         <div className="max-w-6xl mx-auto">
           
           <div className="text-center max-w-2xl mx-auto mb-16 space-y-4">
-            <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-blue-500/10 border border-blue-500/20 text-blue-400 text-xs font-bold uppercase tracking-wider">
+            <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-blue-500/10 border border-blue-500/20 text-blue-300 text-xs font-bold uppercase tracking-wider">
               {language === 'es' ? 'Gobernanza & Cumplimiento' : 'Governance & Compliance'}
             </div>
             <h2 className="text-3xl sm:text-4xl font-black text-white tracking-tight">
@@ -727,7 +728,7 @@ const LandingPage = () => {
                   {language === 'es' ? 'Historial cronológico de acciones inalterable para auditorías y control legal.' : 'Chronological, append-only historical trace of all system actions for absolute legal audits.'}
                 </p>
               </div>
-              <span className="text-[9px] text-[#717182] font-mono font-bold tracking-widest uppercase">Compliance Ready</span>
+              <span className="text-[9px] text-[#A0A0B0] font-mono font-bold tracking-widest uppercase">Compliance Ready</span>
             </div>
 
             {/* Card 2: Principle of Least Privilege */}
@@ -741,7 +742,7 @@ const LandingPage = () => {
                   {language === 'es' ? 'Políticas de acceso restrictivas (Analistas no modifican integraciones ni claves).' : 'Restrictive access permissions. Analysts cannot modify integrations, credentials, or billing.'}
                 </p>
               </div>
-              <span className="text-[9px] text-[#717182] font-mono font-bold tracking-widest uppercase">Granular Access</span>
+              <span className="text-[9px] text-[#A0A0B0] font-mono font-bold tracking-widest uppercase">Granular Access</span>
             </div>
 
             {/* Card 3: PII Sanitization */}
@@ -755,7 +756,7 @@ const LandingPage = () => {
                   {language === 'es' ? 'Ofuscación de datos personales sensibles antes de procesarse en APIs de IA externas.' : 'Masking and filtering of sensitive personal information before external LLM integrations process it.'}
                 </p>
               </div>
-              <span className="text-[9px] text-[#717182] font-mono font-bold tracking-widest uppercase">Data Privacy</span>
+              <span className="text-[9px] text-[#A0A0B0] font-mono font-bold tracking-widest uppercase">Data Privacy</span>
             </div>
 
             {/* Card 4: Fail-Open Architecture */}
@@ -769,7 +770,7 @@ const LandingPage = () => {
                   {language === 'es' ? 'Si el proveedor de IA cae, el CRM se mantiene activo con alertas en cola para soporte.' : 'If the AI provider encounters timeouts, the CRM continues functioning with queued support tickets.'}
                 </p>
               </div>
-              <span className="text-[9px] text-[#717182] font-mono font-bold tracking-widest uppercase">High Availability</span>
+              <span className="text-[9px] text-[#A0A0B0] font-mono font-bold tracking-widest uppercase">High Availability</span>
             </div>
 
           </div>
@@ -782,7 +783,7 @@ const LandingPage = () => {
         <div className="max-w-6xl mx-auto">
           
           <div className="text-center max-w-2xl mx-auto mb-16 space-y-4">
-            <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-indigo-500/10 border border-indigo-500/20 text-indigo-400 text-xs font-bold uppercase tracking-wider">
+            <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-indigo-500/10 border border-indigo-500/20 text-indigo-300 text-xs font-bold uppercase tracking-wider">
               {language === 'es' ? 'Planes Flexibles' : 'Flexible Plans'}
             </div>
             <h2 className="text-3xl sm:text-4xl font-black text-white tracking-tight">
@@ -796,6 +797,7 @@ const LandingPage = () => {
               </span>
               <button 
                 onClick={() => setIsYearly(!isYearly)}
+                aria-label="Toggle monthly or annual billing"
                 className="w-10.5 h-6 rounded-full bg-white/10 border border-white/10 p-0.5 relative transition-colors duration-300 flex items-center cursor-pointer"
               >
                 <div className={`w-4.5 h-4.5 rounded-full bg-blue-500 shadow-md transform transition-transform duration-300 ${isYearly ? 'translate-x-4.5' : 'translate-x-0'}`} />
@@ -820,7 +822,7 @@ const LandingPage = () => {
                 </div>
                 <div className="flex items-baseline gap-1">
                   <span className="text-4xl font-black text-white">${isYearly ? '19' : '24'}</span>
-                  <span className="text-xs text-[#717182] font-semibold">USD / {language === 'es' ? 'mes' : 'mo'}</span>
+                  <span className="text-xs text-[#A0A0B0] font-semibold">USD / {language === 'es' ? 'mes' : 'mo'}</span>
                 </div>
                 <p className="text-xs text-slate-400 font-semibold leading-relaxed">
                   {language === 'es' ? 'Perfecto para creadores de contenido individuales y pequeñas marcas.' : 'Perfect for individual creators and starting brands.'}
@@ -857,7 +859,7 @@ const LandingPage = () => {
                 </div>
                 <div className="flex items-baseline gap-1">
                   <span className="text-4xl font-black text-white">${isYearly ? '39' : '49'}</span>
-                  <span className="text-xs text-[#717182] font-semibold">USD / {language === 'es' ? 'mes' : 'mo'}</span>
+                  <span className="text-xs text-[#A0A0B0] font-semibold">USD / {language === 'es' ? 'mes' : 'mo'}</span>
                 </div>
                 <p className="text-xs text-slate-400 font-semibold leading-relaxed">
                   {language === 'es' ? 'Para agencias de marketing y marcas corporativas en pleno crecimiento.' : 'For digital agencies and growing corporate brands.'}
@@ -944,6 +946,7 @@ const LandingPage = () => {
           </div>
         </div>
       </section>
+      </main>
 
       {/* Modern Footer */}
       <footer className="py-16 px-6 border-t border-white/5 bg-[#050812]">
@@ -953,14 +956,14 @@ const LandingPage = () => {
             <div className="flex items-center gap-2.5">
               <DoceLogo className="h-6 w-auto text-white" />
             </div>
-            <p className="text-xs text-[#717182] leading-relaxed max-w-sm font-semibold">
+            <p className="text-xs text-[#A0A0B0] leading-relaxed max-w-sm font-semibold">
               {language === 'es' ? 'Nuestra misión es democratizar el poder de la Inteligencia Artificial conversacional para automatizar y hacer crecer tu negocio orgánicamente.' : 'Democratizing the power of conversational Artificial Intelligence to automate and scale your business organic growth.'}
             </p>
           </div>
 
           <div className="space-y-3">
             <h4 className="text-xs font-bold text-white uppercase tracking-wider">{language === 'es' ? 'Producto' : 'Product'}</h4>
-            <ul className="space-y-2 text-xs text-[#717182] font-semibold">
+            <ul className="space-y-2 text-xs text-[#A0A0B0] font-semibold">
               <li><a href="#features" className="hover:text-slate-300 transition-colors">{language === 'es' ? 'Funcionalidades' : 'Features'}</a></li>
               <li><a href="#pricing" className="hover:text-slate-300 transition-colors">{language === 'es' ? 'Precios' : 'Pricing'}</a></li>
               <li><a href="#how-it-works" className="hover:text-slate-300 transition-colors">{language === 'es' ? 'Cómo Funciona' : 'How It Works'}</a></li>
@@ -969,7 +972,7 @@ const LandingPage = () => {
 
           <div className="space-y-3">
             <h4 className="text-xs font-bold text-white uppercase tracking-wider">{language === 'es' ? 'Soporte' : 'Support'}</h4>
-            <ul className="space-y-2 text-xs text-[#717182] font-semibold">
+            <ul className="space-y-2 text-xs text-[#A0A0B0] font-semibold">
               <li><a href="#" className="hover:text-slate-300 transition-colors">Documentation</a></li>
               <li><a href="#" className="hover:text-slate-300 transition-colors">API References</a></li>
               <li><a href="#" className="hover:text-slate-300 transition-colors">Status Page</a></li>
@@ -978,7 +981,7 @@ const LandingPage = () => {
 
         </div>
 
-        <div className="max-w-7xl mx-auto border-t border-white/5 pt-8 flex flex-col sm:flex-row items-center justify-between gap-4 text-[10px] text-[#717182] font-semibold">
+        <div className="max-w-7xl mx-auto border-t border-white/5 pt-8 flex flex-col sm:flex-row items-center justify-between gap-4 text-[10px] text-[#A0A0B0] font-semibold">
           <p>© 2026 Doce Digital Management Platform v2. Todos los derechos reservados.</p>
           <div className="flex gap-4">
             <a href="#" className="hover:underline">Privacy Policy</a>
