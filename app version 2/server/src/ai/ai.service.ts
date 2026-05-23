@@ -1,5 +1,7 @@
 import { Injectable, Logger } from '@nestjs/common';
 import axios from 'axios';
+import * as fs from 'fs';
+import * as path from 'path';
 
 @Injectable()
 export class AIService {
@@ -56,11 +58,37 @@ export class AIService {
   async generateImage(prompt: string): Promise<string> {
     this.logger.log(`Generando imagen IA de alta calidad para el prompt: "${prompt}"`);
     
-    // Usamos el motor premium de Pollinations AI. Es totalmente dinámico, gratuito, no requiere keys
-    // y crea imágenes reales de Stable Diffusion basadas en el prompt exacto del usuario.
     const cleanPrompt = encodeURIComponent(prompt.trim());
     const seed = Math.floor(Math.random() * 999999);
-    return `https://image.pollinations.ai/prompt/${cleanPrompt}?width=1080&height=1080&nologo=true&seed=${seed}&enhance=true`;
+    const pollinationsUrl = `https://image.pollinations.ai/prompt/${cleanPrompt}?width=1080&height=1080&nologo=true&seed=${seed}&enhance=true`;
+
+    try {
+      this.logger.log(`Descargando imagen generada desde Pollinations AI...`);
+      const response = await axios.get(pollinationsUrl, { responseType: 'arraybuffer', timeout: 25000 });
+      const buffer = Buffer.from(response.data);
+
+      const filename = `image_${Date.now()}_${seed}.png`;
+      const uploadDir = path.join(process.cwd(), 'uploads');
+      const filePath = path.join(uploadDir, filename);
+
+      if (!fs.existsSync(uploadDir)) {
+        fs.mkdirSync(uploadDir, { recursive: true });
+      }
+
+      fs.writeFileSync(filePath, buffer);
+      this.logger.log(`Imagen IA guardada localmente en: ${filePath}`);
+
+      const staticUrl = process.env.RAILWAY_STATIC_URL;
+      const baseUrl = staticUrl
+        ? `https://${staticUrl}`
+        : process.env.BACKEND_URL || 'http://localhost:3000';
+
+      return `${baseUrl}/instagram/uploads/${filename}`;
+    } catch (error) {
+      this.logger.error('Error al descargar o guardar la imagen de Pollinations AI, utilizando fallback estético.', error.message);
+      // Fallback a Unsplash en caso de falla extrema
+      return `https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?w=1080&auto=format&fit=crop&q=80&sig=${seed}`;
+    }
   }
 
   private getLocalCopyFallback(prompt: string, tone: string): string {

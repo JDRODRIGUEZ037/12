@@ -1,6 +1,8 @@
 import { Controller, Get, Post, Body, Query, Res, HttpStatus, Param } from '@nestjs/common';
 import { InstagramService } from './instagram.service';
 import type { Response } from 'express';
+import * as fs from 'fs';
+import * as path from 'path';
 
 @Controller(['instagram', 'facebook'])
 export class InstagramController {
@@ -137,5 +139,18 @@ export class InstagramController {
   ) {
     await this.instagramService.handleWebhookPayload(body);
     return res.status(HttpStatus.OK).send('EVENT_RECEIVED');
+  }
+
+  @Get('uploads/:filename')
+  async getUpload(
+    @Param('filename') filename: string,
+    @Res() res: Response,
+  ) {
+    const filePath = path.join(process.cwd(), 'uploads', filename);
+    if (!fs.existsSync(filePath)) {
+      return res.status(HttpStatus.NOT_FOUND).send('File not found');
+    }
+    res.setHeader('Content-Type', 'image/png');
+    return res.sendFile(filePath);
   }
 }
